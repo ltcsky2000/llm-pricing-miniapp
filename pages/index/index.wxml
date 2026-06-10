@@ -1,7 +1,9 @@
 <view class="container">
   <view class="header">
-    <image class="header-logo" src="/images/chinatelcom.png" mode="aspectFit"></image>
-    <text class="title">大模型Token价格</text>
+    <view class="header-title-row">
+      <image class="header-logo" src="/images/chinatelcom.png" mode="aspectFit"></image>
+      <text class="title">大模型Token价格</text>
+    </view>
     <text class="subtitle">单位：元/百万tokens · 每日更新</text>
   </view>
   <view class="filter-bar">
