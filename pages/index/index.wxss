@@ -1,4 +1,4 @@
-.header{text-align:center;padding:40rpx 0 20rpx}.title{font-size:40rpx;font-weight:700;color:#fff;display:block}.subtitle{font-size:24rpx;color:#888;margin-top:10rpx;display:block}
+.header{text-align:center;padding:40rpx 0 20rpx}.header-logo{width:64rpx;height:64rpx;display:block;margin:0 auto 12rpx;border-radius:12rpx}.title{font-size:40rpx;font-weight:700;color:#fff;display:block}.subtitle{font-size:24rpx;color:#888;margin-top:10rpx;display:block}
 .filter-bar{display:flex;gap:16rpx;margin:20rpx 0;align-items:center}.search-input{flex:1;height:72rpx;background:rgba(255,255,255,0.08);border-radius:36rpx;padding:0 32rpx;color:#fff;font-size:28rpx;border:1rpx solid rgba(255,255,255,0.1)}
 .search-placeholder{color:#666}.picker-btn{height:72rpx;line-height:72rpx;padding:0 28rpx;background:rgba(100,149,237,0.2);border-radius:36rpx;color:#7eb8ff;font-size:26rpx;white-space:nowrap}
 .sort-bar{display:flex;gap:24rpx;margin-bottom:20rpx}.sort-item{font-size:26rpx;color:#888;padding:8rpx 20rpx;border-radius:20rpx;background:rgba(255,255,255,0.04)}.sort-item.active{color:#7eb8ff;background:rgba(100,149,237,0.15)}
