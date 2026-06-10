@@ -1,0 +1,34 @@
+<view class="container">
+  <view class="detail-card">
+    <view class="model-header">
+      <view class="provider-tag" style="background:{{model.providerColor}}">{{model.provider}}</view>
+      <view class="header-name">{{model.name}}</view>
+      <text class="header-desc" wx:if="{{model.desc}}">{{model.desc}}</text>
+    </view>
+    <view class="section">
+      <text class="section-title">💰 价格详情 (元/百万tokens)</text>
+      <view class="price-table">
+        <view class="price-row-detail"><text class="price-type">输入价格</text><text class="price-num">{{model.inputPrice}}</text></view>
+        <view class="price-row-detail" wx:if="{{model.inputNote}}"><text class="price-type">输入说明</text><text class="price-num small">{{model.inputNote}}</text></view>
+        <view class="price-row-detail"><text class="price-type">输出价格</text><text class="price-num">{{model.outputPrice}}</text></view>
+        <view class="price-row-detail" wx:if="{{model.outputNote}}"><text class="price-type">输出说明</text><text class="price-num small">{{model.outputNote}}</text></view>
+        <view class="price-row-detail" wx:if="{{model.cachePrice}}"><text class="price-type">缓存命中</text><text class="price-num">{{model.cachePrice}}</text></view>
+      </view>
+    </view>
+    <view class="section">
+      <text class="section-title">📊 技术参数</text>
+      <view class="info-grid">
+        <view class="info-item"><text class="info-label">上下文窗口</text><text class="info-value">{{model.contextWindow || '未知'}}</text></view>
+        <view class="info-item" wx:if="{{model.maxOutput}}"><text class="info-label">最大输出</text><text class="info-value">{{model.maxOutput}}</text></view>
+        <view class="info-item"><text class="info-label">模型类型</text><text class="info-value">{{model.modelType || '通用'}}</text></view>
+        <view class="info-item" wx:if="{{model.capabilities}}"><text class="info-label">支持能力</text><text class="info-value">{{model.capabilities}}</text></view>
+      </view>
+    </view>
+    <view class="section">
+      <text class="section-title">🔗 价格来源</text>
+      <view class="source-links">
+        <text class="source-link" wx:for="{{model.sources}}" wx:key="*this" bindtap="onCopySource" data-url="{{item}}">{{item}}</text>
+      </view>
+    </view>
+  </view>
+</view>

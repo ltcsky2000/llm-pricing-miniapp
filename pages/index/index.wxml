@@ -1,0 +1,57 @@
+<view class="container">
+  <view class="header">
+    <text class="title">🤖 大模型Token价格</text>
+    <text class="subtitle">单位：元/百万tokens · 每日更新</text>
+  </view>
+  <view class="filter-bar">
+    <input class="search-input" placeholder="搜索模型名称..." value="{{keyword}}" bindinput="onSearch" placeholder-class="search-placeholder"/>
+    <picker mode="selector" range="{{providers}}" value="{{providerIdx}}" bindchange="onProviderChange">
+      <view class="picker-btn">{{providers[providerIdx]}}</view>
+    </picker>
+  </view>
+  <view class="sort-bar">
+    <view class="sort-item {{sortBy === 'input' ? 'active' : ''}}" bindtap="onSort" data-field="input">输入价格 ▾</view>
+    <view class="sort-item {{sortBy === 'output' ? 'active' : ''}}" bindtap="onSort" data-field="output">输出价格 ▾</view>
+    <view class="sort-item {{sortBy === 'name' ? 'active' : ''}}" bindtap="onSort" data-field="name">名称</view>
+  </view>
+  <view class="update-time" wx:if="{{lastUpdate}}">更新于: {{lastUpdate}}</view>
+  <view class="price-list">
+    <view class="price-card" wx:for="{{filteredList}}" wx:key="id" bindtap="onTapModel" data-id="{{item.id}}">
+      <view class="card-header">
+        <view class="provider-tag" style="background:{{item.providerColor}}">{{item.provider}}</view>
+        <view class="model-badges">
+          <text class="badge badge-new" wx:if="{{item.isNew}}">NEW</text>
+          <text class="badge badge-hot" wx:if="{{item.isHot}}">HOT</text>
+        </view>
+      </view>
+      <view class="model-name">{{item.name}}</view>
+      <view class="model-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
+      <view class="price-row">
+        <view class="price-item">
+          <text class="price-label">输入</text>
+          <text class="price-value">¥{{item.inputPrice}}</text>
+          <text class="price-note" wx:if="{{item.inputNote}}">{{item.inputNote}}</text>
+        </view>
+        <view class="price-divider"></view>
+        <view class="price-item">
+          <text class="price-label">输出</text>
+          <text class="price-value">¥{{item.outputPrice}}</text>
+          <text class="price-note" wx:if="{{item.outputNote}}">{{item.outputNote}}</text>
+        </view>
+      </view>
+      <view class="cache-row" wx:if="{{item.cachePrice}}">
+        <text class="cache-label">缓存命中:</text>
+        <text class="cache-value">¥{{item.cachePrice}}</text>
+      </view>
+      <view class="context-info" wx:if="{{item.contextWindow}}">上下文: {{item.contextWindow}}</view>
+    </view>
+  </view>
+  <view class="empty-state" wx:if="{{filteredList.length === 0}}">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">未找到匹配的模型</text>
+  </view>
+  <view class="footer-note">
+    <text>数据来源：DeepSeek · 天翼云 · OpenAI · Anthropic · Google · Meta</text>
+    <text class="footer-disclaimer">价格可能变动，请以官方最新公告为准</text>
+  </view>
+</view>
