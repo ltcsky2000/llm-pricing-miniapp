@@ -31,6 +31,9 @@
         </view>
       </view>
       <view class="model-name">{{item.name}}</view>
+      <view class="model-tag-row" wx:if="{{item.tag}}">
+        <text class="model-tag">{{item.tag}}</text>
+      </view>
       <view class="model-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
       <view class="price-row">
         <view class="price-item">
@@ -57,7 +60,7 @@
     <text class="empty-text">未找到匹配的模型</text>
   </view>
   <view class="footer-note" wx:if="{{!loading}}">
-    <text>数据来源：DeepSeek · 天翼云 · 阿里百炼 · Google</text>
+    <text>数据来源：DeepSeek · 天翼云 · 阿里百炼 · 硅基流动 · Google</text>
     <text class="footer-disclaimer">价格可能变动，请以官方最新公告为准</text>
   </view>
 </view>

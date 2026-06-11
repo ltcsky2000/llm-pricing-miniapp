@@ -4,6 +4,9 @@
       <view class="provider-tag" style="background:{{model.providerColor}}">{{model.provider}}</view>
       <view class="header-name">{{model.name}}</view>
       <text class="header-desc" wx:if="{{model.desc}}">{{model.desc}}</text>
+      <view class="header-tag" wx:if="{{model.tag}}">
+        <text class="model-tag-detail">{{model.tag}}</text>
+      </view>
     </view>
     <view class="section">
       <text class="section-title">💰 价格详情 (元/百万tokens)</text>

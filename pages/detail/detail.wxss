@@ -1,7 +1,7 @@
 .detail-card{padding:30rpx}
 .model-header{text-align:center;padding:40rpx 0 30rpx;border-bottom:1rpx solid rgba(255,255,255,0.06);margin-bottom:30rpx}
 .provider-tag{display:inline-block;font-size:22rpx;color:#fff;padding:6rpx 20rpx;border-radius:8rpx;margin-bottom:16rpx}
-.header-name{font-size:44rpx;font-weight:700;color:#fff;margin-bottom:10rpx}.header-desc{font-size:26rpx;color:#888}
+.header-name{font-size:44rpx;font-weight:700;color:#fff;margin-bottom:10rpx}.header-desc{font-size:26rpx;color:#888}.header-tag{margin-top:10rpx}.model-tag-detail{font-size:24rpx;color:#7eb8ff;background:rgba(100,149,237,0.12);padding:4rpx 16rpx;border-radius:10rpx}
 .section{margin-bottom:36rpx}.section-title{font-size:30rpx;font-weight:600;color:#7eb8ff;display:block;margin-bottom:20rpx}
 .price-table{background:rgba(255,255,255,0.03);border-radius:16rpx;overflow:hidden}
 .price-row-detail{display:flex;justify-content:space-between;align-items:center;padding:20rpx 24rpx;border-bottom:1rpx solid rgba(255,255,255,0.04)}
