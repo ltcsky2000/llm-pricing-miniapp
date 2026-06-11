@@ -1,0 +1,6 @@
+{
+  "name": "cloudfunctions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WeChat Cloud Functions for LLM Pricing Mini Program"
+}

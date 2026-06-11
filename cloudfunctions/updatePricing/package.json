@@ -1,0 +1,9 @@
+{
+  "name": "updatePricing",
+  "version": "1.0.0",
+  "description": "每日自动爬取更新模型定价数据",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

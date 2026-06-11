@@ -1,0 +1,9 @@
+{
+  "name": "getPricing",
+  "version": "1.0.0",
+  "description": "获取最新模型定价数据",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}
