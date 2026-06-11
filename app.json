@@ -7,7 +7,6 @@
     "navigationBarTextStyle": "white",
     "backgroundColor": "#0f0f23"
   },
-  "cloudfunctionRoot": "cloudfunctions/",
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }
