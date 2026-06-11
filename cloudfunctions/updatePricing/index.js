@@ -110,7 +110,7 @@ async function scrapeCtyun(models) {
 
 // Google — 从 AI Dev 页面解析
 async function scrapeGoogle(models) {
-  const html = await fetchUrl('https://ai.google.dev/gemini-api/docs/pricing')
+  const html = await fetchUrl('https://ai.google.dev/gemini-api/docs/pricing', 5000)
   if (!html) return
   // 提取模型块：模型名 → Input price → Output price
   // Gemini 2.5 Flash 等模型出现在 h2 + 表格结构中
