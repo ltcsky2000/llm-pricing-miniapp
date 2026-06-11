@@ -10,7 +10,7 @@ const SEED_DATA = [{"n":"Qwen3-8B","p":"天翼云","pc":"#0078D4","i":0.3,"o":0.
 const COLL = 'pricing'
 const DOC_ID = 'latest'
 
-function fetchUrl(url, timeout = 15000) {
+function fetchUrl(url, timeout = 10000) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36', 'Accept-Language': 'zh-CN,zh;q=0.9' },
@@ -250,6 +250,13 @@ exports.main = async (event, context) => {
     isSeeded = true
     console.log(`[INIT] 导入 ${models.length} 条种子数据`)
   } else {
+    // 合并种子数据中的新模型（如硅基流动、智谱等新增供应商）
+    const existingIds = new Set(models.map(m => m.id))
+    const newModels = SEED_DATA.filter(m => !existingIds.has(m.id))
+    if (newModels.length > 0) {
+      models = models.concat(JSON.parse(JSON.stringify(newModels)))
+      console.log(`[MERGE] 新增 ${newModels.length} 个模型（${newModels.map(m=>m.p).filter((v,i,a)=>a.indexOf(v)===i).join(', ')}）`)
+    }
     console.log(`[LOAD] ${models.length} 条`)
   }
 
