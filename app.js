@@ -9,6 +9,15 @@ function expand(m) {
 }
 
 App({
-  onLaunch() {},
+  onLaunch: function() {
+    if (!wx.cloud) {
+      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
+    } else {
+      wx.cloud.init({
+        env: 'YOUR-ENV-ID', // 替换为你的云开发环境ID
+        traceUser: true
+      })
+    }
+  },
   globalData: { models: models, expand: expand, updateTime: '2026-06-11' }
 })

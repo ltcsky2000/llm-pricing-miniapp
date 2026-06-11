@@ -6,19 +6,22 @@
     </view>
     <text class="subtitle">单位：元/百万tokens · 每日更新</text>
   </view>
-  <view class="filter-bar">
+  <view class="loading-bar" wx:if="{{loading}}">
+    <text class="loading-text">正在获取最新价格数据...</text>
+  </view>
+  <view class="filter-bar" wx:if="{{!loading}}">
     <input class="search-input" placeholder="搜索模型名称..." value="{{keyword}}" bindinput="onSearch" placeholder-class="search-placeholder"/>
     <picker mode="selector" range="{{providers}}" value="{{providerIdx}}" bindchange="onProviderChange">
       <view class="picker-btn">{{providers[providerIdx]}}</view>
     </picker>
   </view>
-  <view class="sort-bar">
+  <view class="sort-bar" wx:if="{{!loading}}">
     <view class="sort-item {{sortBy === 'input' ? 'active' : ''}}" bindtap="onSort" data-field="input">输入价格 ▾</view>
     <view class="sort-item {{sortBy === 'output' ? 'active' : ''}}" bindtap="onSort" data-field="output">输出价格 ▾</view>
     <view class="sort-item {{sortBy === 'name' ? 'active' : ''}}" bindtap="onSort" data-field="name">名称</view>
   </view>
-  <view class="update-time" wx:if="{{lastUpdate}}">更新于: {{lastUpdate}}</view>
-  <view class="price-list">
+  <view class="update-time" wx:if="{{lastUpdate && !loading}}">更新于: {{lastUpdate}}</view>
+  <view class="price-list" wx:if="{{!loading}}">
     <view class="price-card" wx:for="{{filteredList}}" wx:key="id" bindtap="onTapModel" data-id="{{item.id}}">
       <view class="card-header">
         <view class="provider-tag" style="background:{{item.providerColor}}">{{item.provider}}</view>
@@ -49,11 +52,11 @@
       <view class="context-info" wx:if="{{item.contextWindow}}">上下文: {{item.contextWindow}}</view>
     </view>
   </view>
-  <view class="empty-state" wx:if="{{filteredList.length === 0}}">
+  <view class="empty-state" wx:if="{{!loading && filteredList.length === 0}}">
     <text class="empty-icon">🔍</text>
     <text class="empty-text">未找到匹配的模型</text>
   </view>
-  <view class="footer-note">
+  <view class="footer-note" wx:if="{{!loading}}">
     <text>数据来源：DeepSeek · 天翼云 · OpenAI · Anthropic · Google · Meta</text>
     <text class="footer-disclaimer">价格可能变动，请以官方最新公告为准</text>
   </view>
