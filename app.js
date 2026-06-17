@@ -15,7 +15,7 @@ var SELF_HOSTED_API = 'https://api.ltcsky.net/pricing/latest.json'
 
 // 数据源类型: 'auto' | 'selfhosted' | 'cloud'
 function getDataSource() {
-  try { return wx.getStorageSync('dataSource') || 'auto' } catch(e) { return 'auto' }
+  try { return wx.getStorageSync('dataSource') || 'selfhosted' } catch(e) { return 'selfhosted' }
 }
 
 function setDataSource(source) {

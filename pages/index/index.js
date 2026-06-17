@@ -155,7 +155,8 @@ Page({
     var self = this
     var app = getApp()
     var ds = app.globalData.getDataSource()
-    var next = ds === 'auto' ? 'selfhosted' : ds === 'selfhosted' ? 'cloud' : 'auto'
+    // 只在自建和云端之间切换（本地仅自动回落）
+    var next = ds === 'selfhosted' ? 'cloud' : 'selfhosted'
     app.globalData.setDataSource(next)
     self.setData({ loading: true, filteredList: [], dataSource: next })
     self.updateSourceLabel(next)
