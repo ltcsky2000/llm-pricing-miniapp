@@ -5,7 +5,7 @@ LLM 模型定价爬虫 — 自建服务器版
 用法: python3 scraper.py [--output /path/to/latest.json]
 """
 
-import json, re, sys, os, time
+import json, re, sys, os, time, shutil
 from datetime import datetime, timezone, timedelta
 
 import requests
@@ -621,7 +621,7 @@ def scrape_zhipu(models):
 # 主函数
 # ============================================================
 
-def main(output_path="/opt/llm-pricing/data/latest.json"):
+def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
     start = time.time()
     print(f"[scraper] 开始执行, 输出: {output_path}")
 
@@ -662,6 +662,11 @@ def main(output_path="/opt/llm-pricing/data/latest.json"):
         save_result(models, output_path)
         elapsed = time.time() - start
         print(f"[SAVE] {len(models)} 条 | 耗时 {elapsed:.1f}s")
+        # 同步到 1Panel 网站目录
+        if sync_path:
+            os.makedirs(os.path.dirname(sync_path), exist_ok=True)
+            shutil.copy2(output_path, sync_path)
+            print(f"[SYNC] → {sync_path}")
     except Exception as e:
         errors.append(f"Save: {e}")
         print(f"[ERROR] Save: {e}")
@@ -690,6 +695,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="LLM 模型定价爬虫")
     parser.add_argument("--output", "-o", default="/opt/llm-pricing/data/latest.json", help="输出 JSON 路径")
+    parser.add_argument("--sync", "-s", default="/opt/1panel/www/sites/api.ltcsky.net/index/pricing/latest.json", help="同步到 1Panel 网站目录")
     args = parser.parse_args()
-    result = main(args.output)
+    result = main(args.output, args.sync)
     print(json.dumps(result, ensure_ascii=False, indent=2))

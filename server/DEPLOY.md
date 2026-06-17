@@ -53,45 +53,29 @@ cat /opt/llm-pricing/data/latest.json | python3 -m json.tool | head -30
 ### 4.1 创建网站
 
 1Panel → 网站 → 创建网站 → 静态网站：
-- **域名**: `api.ltcsky.net`（需先在 DNS 解析到该主机）
-- **网站目录**: `/opt/llm-pricing/data`
-- **SSL**: 启用，自动申请 Let's Encrypt 证书
+- **域名**: `api.ltcsky.net`
+- **网站目录**: `/opt/1panel/www/sites/api.ltcsky.net/index`
+- **SSL**: 启用，选择已有 `*.ltcsky.net` 证书
 
-### 4.2 添加 CORS 头（重要！小程序跨域需要）
+### 4.2 同步数据到网站目录
 
-1Panel → 网站 → `api.ltcsky.net` → 配置文件 → 在 server 块中添加：
+爬虫运行时自动同步（`--sync` 参数），无需手动操作。
 
+### 4.3 添加 CORS 头
+
+1Panel → 网站 → api.ltcsky.net → 配置文件，在 server 块中添加：
 ```nginx
-# 在 location / 块内添加
-location / {
-    # ... 原有配置 ...
-}
-
-# 允许小程序跨域访问
 add_header Access-Control-Allow-Origin *;
 add_header Access-Control-Allow-Methods GET,OPTIONS;
 add_header Access-Control-Allow-Headers Content-Type;
-
-# 确保 JSON 正确 Content-Type
-location ~ \.json$ {
-    default_type application/json;
-    add_header Access-Control-Allow-Origin *;
-}
 ```
 
-### 4.3 验证
+**注意**: 不要在配置里加 `location /pricing/ { alias ... }`。OpenResty 运行在 Docker 容器内，无法访问宿主机路径。数据通过 `cp` 同步到网站 root 目录。
+
+### 4.4 验证
 
 ```bash
-curl -s https://api.ltcsky.net/pricing/latest.json | python3 -m json.tool | head -10
-```
-
-应返回：
-```json
-{
-    "code": 0,
-    "data": [...],
-    "updateTime": "2026-06-17"
-}
+curl -s https://api.ltcsky.net/pricing/latest.json | head -5
 ```
 
 ## 5. 配置定时任务（cron）
@@ -101,7 +85,7 @@ curl -s https://api.ltcsky.net/pricing/latest.json | python3 -m json.tool | head
 ```bash
 crontab -e
 # 添加：
-0 9 * * * /usr/bin/python3 /opt/llm-pricing/scraper.py --output /opt/llm-pricing/data/latest.json >> /var/log/llm-pricing.log 2>&1
+0 9 * * * /usr/bin/python3 /opt/llm-pricing/scraper.py >> /var/log/llm-pricing.log 2>&1
 ```
 
 ### 方式 B：1Panel 计划任务
