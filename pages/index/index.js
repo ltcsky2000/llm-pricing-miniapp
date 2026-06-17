@@ -51,16 +51,13 @@ Page({
         if (!success) self.fallbackToLocal()
       })
     } else {
-      // auto: 优先自建，回退云端
-      self.setData({ dataSourceLabel: '自建', dataSourceIcon: '🏠' })
+      // auto: 优先自建，回退云端，最后本地
       self.trySelfHosted(function(success, label) {
         if (success) {
-          // 自建成功
+          // 自建成功，标签已在 trySelfHosted 中设置
         } else {
-          self.setData({ dataSourceLabel: '云端', dataSourceIcon: '☁️' })
           self.tryCloud(function(success2) {
             if (!success2) {
-              self.updateSourceLabel('auto')  // 恢复标签
               self.fallbackToLocal()
             }
           })
@@ -79,15 +76,16 @@ Page({
       success: function(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.length > 0) {
           console.log('[数据] 自建服务器 (' + res.data.data.length + ' 条)')
+          self.setData({ dataSourceLabel: '自建', dataSourceIcon: '🏠' })
           self.initData(res.data.data, res.data.updateTime)
           callback(true, '自建')
         } else {
-          console.warn('[数据] 自建服务器返回异常:', res.statusCode)
+          console.warn('[数据] 自建服务器返回异常:', res.statusCode, 'data长度:', (res.data && res.data.data) ? res.data.data.length : 0)
           callback(false)
         }
       },
       fail: function(err) {
-        console.warn('[数据] 自建服务器连接失败:', err)
+        console.warn('[数据] 自建服务器连接失败:', err.errMsg || err)
         callback(false)
       }
     })
@@ -104,14 +102,15 @@ Page({
       var result = res.result
       if (result && result.code === 0 && result.data && result.data.length > 0) {
         console.log('[数据] 微信云函数 (' + result.data.length + ' 条)')
+        self.setData({ dataSourceLabel: '云端', dataSourceIcon: '☁️' })
         self.initData(result.data, result.updateTime)
         callback(true)
       } else {
-        console.warn('[数据] 云函数返回空数据')
+        console.warn('[数据] 云函数返回空数据, code:', result ? result.code : '无result')
         callback(false)
       }
     }).catch(function(err) {
-      console.warn('[数据] 云函数调用失败:', err)
+      console.warn('[数据] 云函数调用失败:', err.errMsg || err)
       callback(false)
     })
   },
@@ -120,6 +119,8 @@ Page({
     var app = getApp()
     var pricingData = app.globalData
     var models = (pricingData.models || []).map(function(m) { return pricingData.expand(m) })
+    console.log('[数据] 本地数据 (' + models.length + ' 条)')
+    this.setData({ dataSourceLabel: '本地', dataSourceIcon: '📦' })
     this.initData(models, pricingData.updateTime)
   },
 
