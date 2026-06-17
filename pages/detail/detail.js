@@ -4,21 +4,46 @@ Page({
   onLoad: function(o) {
     var self = this
     var id = parseInt(o.id)
-    // 优先从云函数获取
-    if (wx.cloud) {
-      wx.cloud.callFunction({ name: 'getPricing' }).then(function(res) {
-        var result = res.result
-        if (result && result.code === 0 && result.data.length > 0) {
-          self.renderModel(result.data, id)
-        } else {
-          self.fallbackToLocal(id)
+    var app = getApp()
+    var ds = app.globalData.getDataSource()
+
+    // 优先自建
+    if (ds === 'selfhosted' || ds === 'auto') {
+      wx.request({
+        url: app.globalData.SELF_HOSTED_API,
+        timeout: 8000,
+        success: function(res) {
+          if (res.statusCode === 200 && res.data && res.data.data) {
+            self.renderModel(res.data.data, id)
+            return
+          }
+          self.tryCloudFallback(id)
+        },
+        fail: function() {
+          self.tryCloudFallback(id)
         }
-      }).catch(function() {
-        self.fallbackToLocal(id)
       })
     } else {
-      self.fallbackToLocal(id)
+      self.tryCloudFallback(id)
     }
+  },
+
+  tryCloudFallback: function(id) {
+    var self = this
+    if (!wx.cloud) {
+      self.fallbackToLocal(id)
+      return
+    }
+    wx.cloud.callFunction({ name: 'getPricing' }).then(function(res) {
+      var result = res.result
+      if (result && result.code === 0 && result.data && result.data.length > 0) {
+        self.renderModel(result.data, id)
+      } else {
+        self.fallbackToLocal(id)
+      }
+    }).catch(function() {
+      self.fallbackToLocal(id)
+    })
   },
 
   fallbackToLocal: function(id) {

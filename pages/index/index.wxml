@@ -6,6 +6,12 @@
     </view>
     <text class="subtitle">单位：元/百万tokens</text>
     <text class="subtitle-time" wx:if="{{lastUpdate}}">上次更新时间：{{lastUpdate}}</text>
+    <!-- 数据源指示器 -->
+    <view class="source-indicator" bindtap="onDataSourceToggle">
+      <text class="source-icon">{{dataSourceIcon}}</text>
+      <text class="source-label">{{dataSourceLabel}}</text>
+      <text class="source-arrow">›</text>
+    </view>
   </view>
   <view class="loading-bar" wx:if="{{loading}}">
     <text class="loading-text">正在获取最新价格数据...</text>

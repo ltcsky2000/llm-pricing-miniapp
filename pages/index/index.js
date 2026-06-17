@@ -8,26 +8,112 @@ Page({
     filteredList: [],
     lastUpdate: '',
     loading: true,
-    loadError: false
+    loadError: false,
+    dataSource: 'auto',       // 当前数据源
+    dataSourceLabel: '自动',   // 显示标签
+    dataSourceIcon: '🔄'      // 显示图标
   },
 
   onLoad: function() {
     var self = this
-    // 优先从云函数获取最新数据
-    if (wx.cloud) {
-      wx.cloud.callFunction({ name: 'getPricing' }).then(function(res) {
-        var result = res.result
-        if (result && result.code === 0 && result.data.length > 0) {
-          self.initData(result.data, result.updateTime)
-        } else {
-          self.fallbackToLocal()
-        }
-      }).catch(function() {
-        self.fallbackToLocal()
+    var app = getApp()
+    var ds = app.globalData.getDataSource()
+    self.setData({ dataSource: ds })
+    self.updateSourceLabel(ds)
+    self.fetchData(ds)
+  },
+
+  // 更新数据源标签
+  updateSourceLabel: function(ds) {
+    var labels = { 'auto': '自动', 'selfhosted': '自建', 'cloud': '云端' }
+    var icons = { 'auto': '🔄', 'selfhosted': '🏠', 'cloud': '☁️' }
+    this.setData({
+      dataSourceLabel: labels[ds] || ds,
+      dataSourceIcon: icons[ds] || '🔄'
+    })
+  },
+
+  // 获取数据：按优先级尝试
+  fetchData: function(ds) {
+    var self = this
+    var app = getApp()
+
+    if (ds === 'selfhosted') {
+      // 仅自建
+      self.trySelfHosted(function(success) {
+        if (!success) self.tryCloud(function(success2) {
+          if (!success2) self.fallbackToLocal()
+        })
+      })
+    } else if (ds === 'cloud') {
+      // 仅云端
+      self.tryCloud(function(success) {
+        if (!success) self.fallbackToLocal()
       })
     } else {
-      self.fallbackToLocal()
+      // auto: 优先自建，回退云端
+      self.setData({ dataSourceLabel: '自建', dataSourceIcon: '🏠' })
+      self.trySelfHosted(function(success, label) {
+        if (success) {
+          // 自建成功
+        } else {
+          self.setData({ dataSourceLabel: '云端', dataSourceIcon: '☁️' })
+          self.tryCloud(function(success2) {
+            if (!success2) {
+              self.updateSourceLabel('auto')  // 恢复标签
+              self.fallbackToLocal()
+            }
+          })
+        }
+      })
     }
+  },
+
+  // 尝试自建服务器 API
+  trySelfHosted: function(callback) {
+    var self = this
+    var app = getApp()
+    wx.request({
+      url: app.globalData.SELF_HOSTED_API,
+      timeout: 8000,
+      success: function(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.length > 0) {
+          console.log('[数据] 自建服务器 (' + res.data.data.length + ' 条)')
+          self.initData(res.data.data, res.data.updateTime)
+          callback(true, '自建')
+        } else {
+          console.warn('[数据] 自建服务器返回异常:', res.statusCode)
+          callback(false)
+        }
+      },
+      fail: function(err) {
+        console.warn('[数据] 自建服务器连接失败:', err)
+        callback(false)
+      }
+    })
+  },
+
+  // 尝试微信云函数
+  tryCloud: function(callback) {
+    var self = this
+    if (!wx.cloud) {
+      callback(false)
+      return
+    }
+    wx.cloud.callFunction({ name: 'getPricing' }).then(function(res) {
+      var result = res.result
+      if (result && result.code === 0 && result.data && result.data.length > 0) {
+        console.log('[数据] 微信云函数 (' + result.data.length + ' 条)')
+        self.initData(result.data, result.updateTime)
+        callback(true)
+      } else {
+        console.warn('[数据] 云函数返回空数据')
+        callback(false)
+      }
+    }).catch(function(err) {
+      console.warn('[数据] 云函数调用失败:', err)
+      callback(false)
+    })
   },
 
   fallbackToLocal: function() {
@@ -55,19 +141,24 @@ Page({
 
   onPullDownRefresh: function() {
     var self = this
-    if (wx.cloud) {
-      wx.cloud.callFunction({ name: 'getPricing' }).then(function(res) {
-        var result = res.result
-        if (result && result.code === 0 && result.data.length > 0) {
-          self.initData(result.data, result.updateTime)
-        }
-        wx.stopPullDownRefresh()
-      }).catch(function() {
-        wx.stopPullDownRefresh()
-      })
-    } else {
-      wx.stopPullDownRefresh()
-    }
+    var app = getApp()
+    var ds = app.globalData.getDataSource()
+    self.updateSourceLabel(ds)
+    self.fetchData(ds)
+    // fetchData is async, stop refresh after a short delay
+    setTimeout(function() { wx.stopPullDownRefresh() }, 3000)
+  },
+
+  // 切换数据源（手动）
+  onDataSourceToggle: function() {
+    var self = this
+    var app = getApp()
+    var ds = app.globalData.getDataSource()
+    var next = ds === 'auto' ? 'selfhosted' : ds === 'selfhosted' ? 'cloud' : 'auto'
+    app.globalData.setDataSource(next)
+    self.setData({ loading: true, filteredList: [], dataSource: next })
+    self.updateSourceLabel(next)
+    self.fetchData(next)
   },
 
   onSearch: function(e) {
