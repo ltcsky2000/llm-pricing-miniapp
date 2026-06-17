@@ -2,12 +2,12 @@
   "permissions": {
     "openapi": []
   },
-  "timeout": 20,
+  "timeout": 60,
   "triggers": [
     {
       "name": "dailyUpdate",
       "type": "timer",
-      "config": "0 0 9 * * *"
+      "config": "0 0 9 * * * *"
     }
   ]
 }

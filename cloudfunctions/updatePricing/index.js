@@ -32,8 +32,15 @@ async function loadModels() {
 
 async function saveModels(models) {
   const ds = new Date().toLocaleDateString('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-')
-  const data = { models, updateTime: ds, updatedAt: db.serverDate() }
-  await db.collection(COLL).doc(DOC_ID).set(data)
+  if (!Array.isArray(models)) {
+    console.error('[saveModels] models 不是数组:', typeof models)
+    return
+  }
+  const cleanModels = JSON.parse(JSON.stringify(models))
+  const now = new Date().toISOString()
+  await db.collection(COLL).doc(DOC_ID).set({
+    data: { models: cleanModels, updateTime: ds, updatedAt: now }
+  })
 }
 
 // 辅助：模糊匹配模型名
@@ -235,10 +242,8 @@ exports.main = async (event, context) => {
   }
 
   const errors = []
-
-  // 先保存一次时间戳，确保即使后续爬虫超时，更新时间也已写入
-  try { await saveModels(models); console.log(`[SAVE-TS] 时间戳已更新`) }
-  catch (e) { errors.push('SaveTS: ' + e.message) }
+  const startTime = Date.now()
+  console.log(`[TIMING] 开始爬取，种子 ${models.length} 个模型`)
 
   try { await scrapeDeepSeek(models) } catch (e) { errors.push('DeepSeek: ' + e.message) }
   try { await scrapeBailian(models) } catch (e) { errors.push('阿里百炼: ' + e.message) }
@@ -246,8 +251,11 @@ exports.main = async (event, context) => {
   try { await scrapeSiliconFlow(models) } catch (e) { errors.push('硅基流动: ' + e.message) }
   try { await scrapeZhipu(models) } catch (e) { errors.push('智谱: ' + e.message) }
 
-  try { await saveModels(models); console.log(`[SAVE] ${models.length} 条`) }
+  try { await saveModels(models); console.log(`[SAVE] ${models.length} 条 | 耗时 ${(Date.now()-startTime)/1000}s`) }
   catch (e) { errors.push('SaveFinal: ' + e.message) }
 
-  return { code: 0, modelCount: models.length, isSeeded, scrapers: { deepseek: !errors.some(e=>e.startsWith('DeepSeek')), bailian: !errors.some(e=>e.startsWith('阿里百炼')), ctyun: !errors.some(e=>e.startsWith('天翼云')),  siliconflow: !errors.some(e=>e.startsWith('硅基流动')), zhipu: !errors.some(e=>e.startsWith('智谱')) }, errors: errors.length ? errors : undefined }
+  const totalTime = ((Date.now() - startTime) / 1000).toFixed(1)
+  console.log(`[TIMING] 总耗时 ${totalTime}s | scrapers: ${!errors.some(e=>e.startsWith('DeepSeek'))}/${!errors.some(e=>e.startsWith('阿里百炼'))}/${!errors.some(e=>e.startsWith('天翼云'))}/${!errors.some(e=>e.startsWith('硅基流动'))}/${!errors.some(e=>e.startsWith('智谱'))}`)
+
+  return { code: 0, modelCount: models.length, isSeeded, totalTime: totalTime + 's', scrapers: { deepseek: !errors.some(e=>e.startsWith('DeepSeek')), bailian: !errors.some(e=>e.startsWith('阿里百炼')), ctyun: !errors.some(e=>e.startsWith('天翼云')),  siliconflow: !errors.some(e=>e.startsWith('硅基流动')), zhipu: !errors.some(e=>e.startsWith('智谱')) }, errors: errors.length ? errors : undefined }
 }
