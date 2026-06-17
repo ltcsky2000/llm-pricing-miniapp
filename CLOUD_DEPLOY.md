@@ -53,6 +53,13 @@ wx.cloud.init({
 2. 右键 `getPricing` → 「上传并部署：云端安装依赖」
 3. 右键 `updatePricing` → 「上传并部署：云端安装依赖」
 
+**⚠️ 重要：修改 config.json 后必须单独上传触发器！**
+
+上传云函数不会自动更新触发规则。每次修改 `config.json` 后必须：
+4. 右键 `updatePricing` → 「上传触发器」
+
+否则云端仍使用旧的 cron 表达式，定时任务可能无法正确触发。
+
 ### 4. 初始化数据库
 
 **方法 A（推荐）—— 调用一次 updatePricing：**
