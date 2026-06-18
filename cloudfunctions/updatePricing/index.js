@@ -120,14 +120,18 @@ async function scrapeCtyun(models) {
 
 // Kimi
 async function scrapeKimi(models) {
-  try { const html = await fetchUrl('https://platform.moonshot.cn/docs/pricing') } catch(e) { findModel(models,'').filter(m=>m.p==='Kimi').forEach(m=>m.stale=true); return }
+  let html
+  try { html = await fetchUrl('https://platform.moonshot.cn/docs/pricing') } catch(e) { findModel(models,'').filter(m=>m.p==='Kimi').forEach(m=>m.stale=true); return }
+  if (!html) return
   const m = html.match(/kimi-k2\.5[\s\S]{0,500}?([\d.]+)\s*元[\s\S]{0,200}?([\d.]+)\s*元/i)
   if (m) { const ip=parseFloat(m[1]), op=parseFloat(m[2]); findModel(models,'Kimi-K2.5').filter(m=>m.p==='Kimi').forEach(mod=>{mod.i=ip;mod.o=op;delete mod.stale}) }
 }
 
 // MiniMax
 async function scrapeMiniMax(models) {
-  try { const html = await fetchUrl('https://platform.minimaxi.com/document/price') } catch(e) { findModel(models,'').filter(m=>m.p==='MiniMax').forEach(m=>m.stale=true); return }
+  let html
+  try { html = await fetchUrl('https://platform.minimaxi.com/document/price') } catch(e) { findModel(models,'').filter(m=>m.p==='MiniMax').forEach(m=>m.stale=true); return }
+  if (!html) { findModel(models,'').filter(m=>m.p==='MiniMax').forEach(m=>m.stale=true); return }
   let updated=0; ['abab7','abab6.5s','MiniMax-Text-01'].forEach(name=>{const m=html.match(new RegExp(name.replace('.','\\\\.')+'[\\s\\S]{0,300}?([\\d.]+)[\\s\\S]{0,100}?([\\d.]+)','i')); if(m){findModel(models,name).filter(m=>m.p==='MiniMax').forEach(mod=>{mod.i=parseFloat(m[1]);mod.o=parseFloat(m[2]);delete mod.stale;updated++})}})
   if(!updated) findModel(models,'').filter(m=>m.p==='MiniMax').forEach(m=>m.stale=true)
 }
