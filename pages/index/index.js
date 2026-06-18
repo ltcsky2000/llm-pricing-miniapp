@@ -8,119 +8,120 @@ Page({
     filteredList: [],
     lastUpdate: '',
     loading: true,
-    loadError: false,
-    dataSource: 'auto',       // 当前数据源
-    dataSourceLabel: '自动',   // 显示标签
-    dataSourceIcon: '🔄'      // 显示图标
+    activeSource: 'selfhosted',
+    selfhosted: { label: '自建', icon: '🏠', updateTime: '', connected: false, color: 'gray' },
+    cloud: { label: '云端', icon: '☁️', updateTime: '', connected: false, color: 'gray' }
   },
 
   onLoad: function() {
     var self = this
     var app = getApp()
     var ds = app.globalData.getDataSource()
-    self.setData({ dataSource: ds })
-    self.updateSourceLabel(ds)
-    self.fetchData(ds)
+    if (ds === 'cloud') { self.setData({ activeSource: 'cloud' }) }
+    else { self.setData({ activeSource: 'selfhosted' }) }
+    self.probeBothSources()
   },
 
-  // 更新数据源标签
-  updateSourceLabel: function(ds) {
-    var labels = { 'auto': '自动', 'selfhosted': '自建', 'cloud': '云端' }
-    var icons = { 'auto': '🔄', 'selfhosted': '🏠', 'cloud': '☁️' }
-    this.setData({
-      dataSourceLabel: labels[ds] || ds,
-      dataSourceIcon: icons[ds] || '🔄'
-    })
-  },
-
-  // 获取数据：按优先级尝试
-  fetchData: function(ds) {
+  onPullDownRefresh: function() {
     var self = this
-    var app = getApp()
-
-    if (ds === 'selfhosted') {
-      // 仅自建
-      self.trySelfHosted(function(success) {
-        if (!success) self.tryCloud(function(success2) {
-          if (!success2) self.fallbackToLocal()
-        })
-      })
-    } else if (ds === 'cloud') {
-      // 仅云端
-      self.tryCloud(function(success) {
-        if (!success) self.fallbackToLocal()
-      })
-    } else {
-      // auto: 优先自建，回退云端，最后本地
-      self.trySelfHosted(function(success, label) {
-        if (success) {
-          // 自建成功，标签已在 trySelfHosted 中设置
-        } else {
-          self.tryCloud(function(success2) {
-            if (!success2) {
-              self.fallbackToLocal()
-            }
-          })
-        }
-      })
-    }
+    self.probeBothSources()
+    setTimeout(function() { wx.stopPullDownRefresh() }, 5000)
   },
 
-  // 尝试自建服务器 API
-  trySelfHosted: function(callback) {
+  probeBothSources: function() {
+    var self = this
+    self.setData({ loading: true })
+    var done = 0
+    var selfhostedData = null
+    var cloudData = null
+    function finish() {
+      done++
+      if (done < 2) return
+      self.setData({ loading: false })
+      var active = self.data.activeSource
+      var showData = null
+      var showTime = ''
+      if (active === 'selfhosted' && selfhostedData) { showData = selfhostedData.data; showTime = selfhostedData.updateTime }
+      else if (active === 'cloud' && cloudData) { showData = cloudData.data; showTime = cloudData.updateTime }
+      else if (selfhostedData) { showData = selfhostedData.data; showTime = selfhostedData.updateTime }
+      else if (cloudData) { showData = cloudData.data; showTime = cloudData.updateTime }
+      else { self.fallbackToLocal(); return }
+      self.initData(showData, showTime)
+    }
+    self.probeSelfHosted(function(result) { selfhostedData = result; finish() })
+    self.probeCloud(function(result) { cloudData = result; finish() })
+  },
+
+  probeSelfHosted: function(callback) {
     var self = this
     var app = getApp()
     wx.request({
-      url: app.globalData.SELF_HOSTED_API,
-      timeout: 8000,
+      url: app.globalData.SELF_HOSTED_API, timeout: 8000,
       success: function(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.length > 0) {
-          console.log('[数据] 自建服务器 (' + res.data.data.length + ' 条)')
-          self.setData({ dataSourceLabel: '自建', dataSourceIcon: '🏠' })
-          self.initData(res.data.data, res.data.updateTime)
-          callback(true, '自建')
-        } else {
-          console.warn('[数据] 自建服务器返回异常:', res.statusCode, 'data长度:', (res.data && res.data.data) ? res.data.data.length : 0)
-          callback(false)
-        }
+          var t = res.data.updateTime || ''
+          var color = self.timeColor(t)
+          self.setData({ 'selfhosted.connected': true, 'selfhosted.updateTime': t, 'selfhosted.color': color })
+          callback({ data: res.data.data, updateTime: t })
+        } else { self.markSourceDown('selfhosted'); callback(null) }
       },
-      fail: function(err) {
-        console.warn('[数据] 自建服务器连接失败:', err.errMsg || err)
-        callback(false)
-      }
+      fail: function(err) { self.markSourceDown('selfhosted'); callback(null) }
     })
   },
 
-  // 尝试微信云函数
-  tryCloud: function(callback) {
+  probeCloud: function(callback) {
     var self = this
-    if (!wx.cloud) {
-      callback(false)
-      return
-    }
+    if (!wx.cloud) { self.markSourceDown('cloud'); callback(null); return }
     wx.cloud.callFunction({ name: 'getPricing' }).then(function(res) {
       var result = res.result
       if (result && result.code === 0 && result.data && result.data.length > 0) {
-        console.log('[数据] 微信云函数 (' + result.data.length + ' 条)')
-        self.setData({ dataSourceLabel: '云端', dataSourceIcon: '☁️' })
-        self.initData(result.data, result.updateTime)
-        callback(true)
-      } else {
-        console.warn('[数据] 云函数返回空数据, code:', result ? result.code : '无result')
-        callback(false)
-      }
-    }).catch(function(err) {
-      console.warn('[数据] 云函数调用失败:', err.errMsg || err)
-      callback(false)
-    })
+        var t = result.updateTime || ''
+        var color = self.timeColor(t)
+        self.setData({ 'cloud.connected': true, 'cloud.updateTime': t, 'cloud.color': color })
+        callback({ data: result.data, updateTime: t })
+      } else { self.markSourceDown('cloud'); callback(null) }
+    }).catch(function() { self.markSourceDown('cloud'); callback(null) })
+  },
+
+  markSourceDown: function(source) {
+    var update = {}
+    update[source + '.connected'] = false
+    update[source + '.color'] = 'red'
+    this.setData(update)
+  },
+
+  timeColor: function(dateStr) {
+    if (!dateStr) return 'gray'
+    try {
+      var parts = dateStr.split('-')
+      if (parts.length !== 3) return 'gray'
+      var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
+      var now = new Date()
+      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      var updateDay = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+      var diff = (today - updateDay) / (1000 * 60 * 60 * 24)
+      if (diff <= 0) return 'green'
+      if (diff <= 1) return 'yellow'
+      return 'red'
+    } catch(e) { return 'gray' }
+  },
+
+  onSwitchSource: function(e) {
+    var self = this
+    var source = e.currentTarget.dataset.source
+    if (source === self.data.activeSource) return
+    if (source === 'selfhosted' && !self.data.selfhosted.connected) return
+    if (source === 'cloud' && !self.data.cloud.connected) return
+    var app = getApp()
+    app.globalData.setDataSource(source === 'cloud' ? 'cloud' : 'selfhosted')
+    self.setData({ activeSource: source, loading: true, filteredList: [] })
+    self.probeBothSources()
   },
 
   fallbackToLocal: function() {
     var app = getApp()
     var pricingData = app.globalData
     var models = (pricingData.models || []).map(function(m) { return pricingData.expand(m) })
-    console.log('[数据] 本地数据 (' + models.length + ' 条)')
-    this.setData({ dataSourceLabel: '本地', dataSourceIcon: '📦' })
     this.initData(models, pricingData.updateTime)
   },
 
@@ -132,72 +133,27 @@ Page({
     var provSet = {}
     models.forEach(function(m) { provSet[m.provider] = 1 })
     self.allModels = models
-    self.setData({
-      providers: ['全部厂商'].concat(Object.keys(provSet)),
-      lastUpdate: updateTime || '',
-      loading: false
-    })
+    self.setData({ providers: ['全部厂商'].concat(Object.keys(provSet)), lastUpdate: updateTime || '', loading: false })
     self.applyFilters()
   },
 
-  onPullDownRefresh: function() {
-    var self = this
-    var app = getApp()
-    var ds = app.globalData.getDataSource()
-    self.updateSourceLabel(ds)
-    self.fetchData(ds)
-    // fetchData is async, stop refresh after a short delay
-    setTimeout(function() { wx.stopPullDownRefresh() }, 3000)
-  },
-
-  // 切换数据源（手动）
-  onDataSourceToggle: function() {
-    var self = this
-    var app = getApp()
-    var ds = app.globalData.getDataSource()
-    // 只在自建和云端之间切换（本地仅自动回落）
-    var next = ds === 'selfhosted' ? 'cloud' : 'selfhosted'
-    app.globalData.setDataSource(next)
-    self.setData({ loading: true, filteredList: [], dataSource: next })
-    self.updateSourceLabel(next)
-    self.fetchData(next)
-  },
-
-  onSearch: function(e) {
-    this.setData({ keyword: e.detail.value })
-    this.applyFilters()
-  },
-
-  onProviderChange: function(e) {
-    this.setData({ providerIdx: parseInt(e.detail.value) })
-    this.applyFilters()
-  },
-
+  onSearch: function(e) { this.setData({ keyword: e.detail.value }); this.applyFilters() },
+  onProviderChange: function(e) { this.setData({ providerIdx: parseInt(e.detail.value) }); this.applyFilters() },
   onSort: function(e) {
     var f = e.currentTarget.dataset.field
     var a = this.data.sortBy === f ? !this.data.sortAsc : true
     this.setData({ sortBy: f, sortAsc: a })
     this.applyFilters()
   },
-
-  onTapModel: function(e) {
-    wx.navigateTo({ url: '/pages/detail/detail?id=' + e.currentTarget.dataset.id })
-  },
+  onTapModel: function(e) { wx.navigateTo({ url: '/pages/detail/detail?id=' + e.currentTarget.dataset.id }) },
 
   applyFilters: function() {
     var list = this.allModels.slice()
     var kw = this.data.keyword.toLowerCase()
-    if (kw) list = list.filter(function(m) {
-      return m.name.toLowerCase().indexOf(kw) !== -1 ||
-             m.provider.toLowerCase().indexOf(kw) !== -1
-    })
+    if (kw) list = list.filter(function(m) { return m.name.toLowerCase().indexOf(kw) !== -1 || m.provider.toLowerCase().indexOf(kw) !== -1 })
     var pi = this.data.providerIdx
-    if (pi > 0) {
-      var p = this.data.providers[pi]
-      list = list.filter(function(m) { return m.provider === p })
-    }
-    var sb = this.data.sortBy
-    var sa = this.data.sortAsc
+    if (pi > 0) { var p = this.data.providers[pi]; list = list.filter(function(m) { return m.provider === p }) }
+    var sb = this.data.sortBy, sa = this.data.sortAsc
     list.sort(function(a, b) {
       var va, vb
       if (sb === 'input') { va = a.inputPrice||0; vb = b.inputPrice||0 }

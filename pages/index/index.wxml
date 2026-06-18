@@ -5,12 +5,19 @@
       <text class="title">大模型Token价格</text>
     </view>
     <text class="subtitle">单位：元/百万tokens</text>
-    <text class="subtitle-time" wx:if="{{lastUpdate}}">上次更新时间：{{lastUpdate}}</text>
-    <!-- 数据源指示器 -->
-    <view class="source-indicator" bindtap="onDataSourceToggle">
-      <text class="source-icon">{{dataSourceIcon}}</text>
-      <text class="source-label">{{dataSourceLabel}}</text>
-      <text class="source-arrow">›</text>
+    <!-- 双数据源指标行 -->
+    <view class="source-row">
+      <view class="source-item {{activeSource === 'selfhosted' ? 'active' : ''}} {{selfhosted.connected ? '' : 'disabled'}}" bindtap="onSwitchSource" data-source="selfhosted">
+        <text class="source-icon">{{selfhosted.icon}}</text>
+        <text class="source-name">{{selfhosted.label}}</text>
+        <text class="source-time {{selfhosted.color}}">{{selfhosted.updateTime || '连接中...'}}</text>
+      </view>
+      <view class="source-divider"></view>
+      <view class="source-item {{activeSource === 'cloud' ? 'active' : ''}} {{cloud.connected ? '' : 'disabled'}}" bindtap="onSwitchSource" data-source="cloud">
+        <text class="source-icon">{{cloud.icon}}</text>
+        <text class="source-name">{{cloud.label}}</text>
+        <text class="source-time {{cloud.color}}">{{cloud.updateTime || '连接中...'}}</text>
+      </view>
     </view>
   </view>
   <view class="loading-bar" wx:if="{{loading}}">
