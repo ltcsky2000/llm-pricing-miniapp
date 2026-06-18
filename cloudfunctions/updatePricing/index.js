@@ -117,6 +117,27 @@ async function scrapeCtyun(models) {
 
 
 // 智谱 — 从定价页面解析
+
+// Kimi
+async function scrapeKimi(models) {
+  try { const html = await fetchUrl('https://platform.moonshot.cn/docs/pricing') } catch(e) { findModel(models,'').filter(m=>m.p==='Kimi').forEach(m=>m.stale=true); return }
+  const m = html.match(/kimi-k2\.5[\s\S]{0,500}?([\d.]+)\s*元[\s\S]{0,200}?([\d.]+)\s*元/i)
+  if (m) { const ip=parseFloat(m[1]), op=parseFloat(m[2]); findModel(models,'Kimi-K2.5').filter(m=>m.p==='Kimi').forEach(mod=>{mod.i=ip;mod.o=op;delete mod.stale}) }
+}
+
+// MiniMax
+async function scrapeMiniMax(models) {
+  try { const html = await fetchUrl('https://platform.minimaxi.com/document/price') } catch(e) { findModel(models,'').filter(m=>m.p==='MiniMax').forEach(m=>m.stale=true); return }
+  let updated=0; ['abab7','abab6.5s','MiniMax-Text-01'].forEach(name=>{const m=html.match(new RegExp(name.replace('.','\\\\.')+'[\\s\\S]{0,300}?([\\d.]+)[\\s\\S]{0,100}?([\\d.]+)','i')); if(m){findModel(models,name).filter(m=>m.p==='MiniMax').forEach(mod=>{mod.i=parseFloat(m[1]);mod.o=parseFloat(m[2]);delete mod.stale;updated++})}})
+  if(!updated) findModel(models,'').filter(m=>m.p==='MiniMax').forEach(m=>m.stale=true)
+}
+
+// OpenAI/Gemini/Anthropic (Cloudflare blocked, always stale)
+async function scrapeOpenAI(models) { findModel(models,'').filter(m=>m.p==='OpenAI').forEach(m=>m.stale=true) }
+async function scrapeGemini(models) { findModel(models,'').filter(m=>m.p==='Gemini').forEach(m=>m.stale=true) }
+async function scrapeAnthropic(models) { findModel(models,'').filter(m=>m.p==='Anthropic').forEach(m=>m.stale=true) }
+
+
 async function scrapeZhipu(models) {
   const html = await fetchUrl('https://bigmodel.cn/pricing')
   if (!html) return
@@ -250,6 +271,11 @@ exports.main = async (event, context) => {
   try { await scrapeCtyun(models) } catch (e) { errors.push('天翼云: ' + e.message) }
   try { await scrapeSiliconFlow(models) } catch (e) { errors.push('硅基流动: ' + e.message) }
   try { await scrapeZhipu(models) } catch (e) { errors.push('智谱: ' + e.message) }
+  try { await scrapeKimi(models) } catch (e) { errors.push('Kimi: ' + e.message) }
+  try { await scrapeMiniMax(models) } catch (e) { errors.push('MiniMax: ' + e.message) }
+  try { await scrapeOpenAI(models) } catch (e) { errors.push('OpenAI: ' + e.message) }
+  try { await scrapeGemini(models) } catch (e) { errors.push('Gemini: ' + e.message) }
+  try { await scrapeAnthropic(models) } catch (e) { errors.push('Anthropic: ' + e.message) }
 
   try { await saveModels(models); console.log(`[SAVE] ${models.length} 条 | 耗时 ${(Date.now()-startTime)/1000}s`) }
   catch (e) { errors.push('SaveFinal: ' + e.message) }
@@ -257,5 +283,5 @@ exports.main = async (event, context) => {
   const totalTime = ((Date.now() - startTime) / 1000).toFixed(1)
   console.log(`[TIMING] 总耗时 ${totalTime}s | scrapers: ${!errors.some(e=>e.startsWith('DeepSeek'))}/${!errors.some(e=>e.startsWith('阿里百炼'))}/${!errors.some(e=>e.startsWith('天翼云'))}/${!errors.some(e=>e.startsWith('硅基流动'))}/${!errors.some(e=>e.startsWith('智谱'))}`)
 
-  return { code: 0, modelCount: models.length, isSeeded, totalTime: totalTime + 's', scrapers: { deepseek: !errors.some(e=>e.startsWith('DeepSeek')), bailian: !errors.some(e=>e.startsWith('阿里百炼')), ctyun: !errors.some(e=>e.startsWith('天翼云')),  siliconflow: !errors.some(e=>e.startsWith('硅基流动')), zhipu: !errors.some(e=>e.startsWith('智谱')) }, errors: errors.length ? errors : undefined }
+  return { code: 0, modelCount: models.length, isSeeded, totalTime: totalTime + 's', scrapers: { deepseek: !errors.some(e=>e.startsWith('DeepSeek')), bailian: !errors.some(e=>e.startsWith('阿里百炼')), ctyun: !errors.some(e=>e.startsWith('天翼云')),  siliconflow: !errors.some(e=>e.startsWith('硅基流动')), zhipu: !errors.some(e=>e.startsWith('智谱')), kimi: !errors.some(e=>e.startsWith('Kimi')), minimax: !errors.some(e=>e.startsWith('MiniMax')), openai: !errors.some(e=>e.startsWith('OpenAI')), gemini: !errors.some(e=>e.startsWith('Gemini')), anthropic: !errors.some(e=>e.startsWith('Anthropic')) }, errors: errors.length ? errors : undefined }
 }

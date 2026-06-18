@@ -398,6 +398,20 @@ SEED_DATA = [
     "t":"Embedding",
     "id":40,
     "tg":"📊 嵌入"},
+{{"n":"Kimi-K2.5-Thinking","p":"Kimi","pc":"#FF6B9D","i":1.0,"o":4.0,"cw":"128K","t":"旗舰模型","cap":"思考/推理","d":"月之暗面旗舰","isHot":True,"id":50,"tg":"🧠 推理"}},
+  {{"n":"Kimi-K2.5","p":"Kimi","pc":"#FF6B9D","i":1.0,"o":4.0,"cw":"128K","t":"旗舰模型","d":"月之暗面","id":51}},
+  {{"n":"Kimi-K2.0","p":"Kimi","pc":"#FF6B9D","i":0.5,"o":1.5,"cw":"128K","t":"通用模型","d":"高性价比","id":52}},
+  {{"n":"abab7","p":"MiniMax","pc":"#FF4500","i":2.0,"o":8.0,"cw":"256K","t":"旗舰模型","d":"MiniMax旗舰","id":53}},
+  {{"n":"abab6.5s","p":"MiniMax","pc":"#FF4500","i":0.5,"o":1.5,"cw":"128K","t":"通用模型","d":"MiniMax轻量","id":54}},
+  {{"n":"MiniMax-Text-01","p":"MiniMax","pc":"#FF4500","i":1.0,"o":4.0,"cw":"256K","t":"通用模型","id":55}},
+  {{"n":"GPT-4o","p":"OpenAI","pc":"#10A37F","i":17.5,"o":70.0,"cw":"128K","t":"旗舰模型","cap":"多模态","d":"OpenAI旗舰","isHot":True,"id":56}},
+  {{"n":"GPT-4o-mini","p":"OpenAI","pc":"#10A37F","i":1.05,"o":4.2,"cw":"128K","t":"轻量模型","d":"高性价比","id":57}},
+  {{"n":"o4-mini","p":"OpenAI","pc":"#10A37F","i":7.7,"o":30.8,"cw":"200K","t":"推理模型","cap":"思考/推理","d":"o系列推理","id":58,"tg":"🧠 推理"}},
+  {{"n":"Gemini-2.5-Pro","p":"Gemini","pc":"#4285F4","i":8.75,"o":35.0,"cw":"1M","t":"旗舰模型","cap":"多模态/思考","d":"G家旗舰","isHot":True,"id":60}},
+  {{"n":"Gemini-2.5-Flash","p":"Gemini","pc":"#4285F4","i":1.05,"o":4.2,"cw":"1M","t":"轻量模型","d":"G家轻量","id":61}},
+  {{"n":"Claude-Sonnet-4","p":"Anthropic","pc":"#D4A574","i":21.0,"o":105.0,"cw":"200K","t":"旗舰模型","cap":"编程/推理","d":"Claude旗舰","isHot":True,"id":63}},
+  {{"n":"Claude-Haiku-4","p":"Anthropic","pc":"#D4A574","i":5.6,"o":28.0,"cw":"200K","t":"轻量模型","d":"Claude轻量","id":64}},
+  {{"n":"Claude-Opus-4","p":"Anthropic","pc":"#D4A574","i":105.0,"o":525.0,"cw":"200K","t":"旗舰模型","cap":"最强推理","d":"Claude顶配","id":65}},
 ]
 
 # ============================================================
@@ -617,6 +631,70 @@ def scrape_zhipu(models):
         print(f"[智谱] 更新 {updated} 个模型")
 
 
+
+# Kimi
+def scrape_kimi(models):
+    try:
+        html = fetch("https://platform.moonshot.cn/docs/pricing")
+    except Exception:
+        for m in find_models(models, "", provider="Kimi"):
+            m["stale"] = True
+        return
+    # 简单正则提取
+    m = re.search(r"kimi-k2\.5[\s\S]{0,500}?([\d.]+)\s*元[\s\S]{0,200}?([\d.]+)\s*元", html, re.I)
+    if m:
+        ip, op = float(m.group(1)), float(m.group(2))
+        for mod in find_models(models, "Kimi-K2.5", provider="Kimi"):
+            mod["i"], mod["o"] = ip, op
+            mod.pop("stale", None)
+
+# MiniMax
+def scrape_minimax(models):
+    try:
+        html = fetch("https://platform.minimaxi.com/document/price")
+    except Exception:
+        for m in find_models(models, "", provider="MiniMax"):
+            m["stale"] = True
+        return
+    updated = 0
+    for name in ["abab7", "abab6.5s", "MiniMax-Text-01"]:
+        m = re.search(name.replace(".", "\\.") + r"[\s\S]{0,300}?([\d.]+)[\s\S]{0,100}?([\d.]+)", html, re.I)
+        if m:
+            for mod in find_models(models, name, provider="MiniMax"):
+                mod["i"], mod["o"] = float(m.group(1)), float(m.group(2))
+                mod.pop("stale", None)
+                updated += 1
+    if not updated:
+        for m in find_models(models, "", provider="MiniMax"):
+            m["stale"] = True
+
+# OpenAI (预期被 Cloudflare 拦截)
+def scrape_openai(models):
+    try:
+        fetch("https://platform.openai.com/docs/pricing", timeout=10)
+    except Exception:
+        pass
+    for m in find_models(models, "", provider="OpenAI"):
+        m["stale"] = True
+
+# Gemini (预期被拦截)
+def scrape_gemini(models):
+    try:
+        fetch("https://ai.google.dev/pricing", timeout=10)
+    except Exception:
+        pass
+    for m in find_models(models, "", provider="Gemini"):
+        m["stale"] = True
+
+# Anthropic (预期被拦截)
+def scrape_anthropic(models):
+    try:
+        fetch("https://www.anthropic.com/pricing", timeout=10)
+    except Exception:
+        pass
+    for m in find_models(models, "", provider="Anthropic"):
+        m["stale"] = True
+
 # ============================================================
 # 主函数
 # ============================================================
@@ -649,7 +727,10 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
     # 依次执行爬虫
     for name, fn in [("DeepSeek", scrape_deepseek), ("阿里百炼", scrape_bailian),
                       ("天翼云", scrape_ctyun), ("硅基流动", scrape_siliconflow),
-                      ("智谱", scrape_zhipu)]:
+                      ("智谱", scrape_zhipu),
+                      ("Kimi", scrape_kimi), ("MiniMax", scrape_minimax),
+                      ("OpenAI", scrape_openai), ("Gemini", scrape_gemini),
+                      ("Anthropic", scrape_anthropic)]:
         try:
             fn(models)
         except Exception as e:
@@ -678,6 +759,11 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
         "ctyun": not any(e.startswith("天翼云") for e in errors),
         "siliconflow": not any(e.startswith("硅基流动") for e in errors),
         "zhipu": not any(e.startswith("智谱") for e in errors),
+        "kimi": not any(e.startswith("Kimi") for e in errors),
+        "minimax": not any(e.startswith("MiniMax") for e in errors),
+        "openai": not any(e.startswith("OpenAI") for e in errors),
+        "gemini": not any(e.startswith("Gemini") for e in errors),
+        "anthropic": not any(e.startswith("Anthropic") for e in errors),
     }
     print(f"[DONE] 总耗时 {elapsed:.1f}s | scrapers: {scraper_status}")
 

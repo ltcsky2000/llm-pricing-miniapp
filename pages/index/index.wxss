@@ -19,6 +19,7 @@
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16rpx}
 .provider-tag{font-size:22rpx;color:#fff;padding:4rpx 16rpx;border-radius:8rpx}
 .model-badges{display:flex;gap:8rpx}.badge{font-size:18rpx;padding:2rpx 10rpx;border-radius:6rpx}.badge-new{background:#ff6b6b;color:#fff}.badge-hot{background:#ffd700;color:#1a1a2e}
+.stale-icon{font-size:22rpx;color:#fbbf24}
 .model-name{font-size:32rpx;font-weight:600;color:#e8e8e8;margin-bottom:6rpx}.model-tag-row{margin-bottom:6rpx}.model-tag{font-size:20rpx;color:#7eb8ff;background:rgba(100,149,237,.12);padding:2rpx 12rpx;border-radius:8rpx;display:inline-block}.model-desc{font-size:24rpx;color:#888;margin-bottom:18rpx}
 .price-row{display:flex;align-items:center;gap:20rpx}.price-item{flex:1;text-align:center}.price-label{font-size:22rpx;color:#888;display:block;margin-bottom:4rpx}.price-value{font-size:36rpx;font-weight:700;color:#ffd700;display:block}.price-note{font-size:20rpx;color:#666;display:block;margin-top:2rpx}.price-divider{width:2rpx;height:60rpx;background:rgba(255,255,255,.08)}
 .cache-row{margin-top:14rpx;padding:10rpx 16rpx;background:rgba(255,215,0,.06);border-radius:8rpx;display:flex;align-items:center;gap:8rpx}.cache-label{font-size:22rpx;color:#aaa}.cache-value{font-size:26rpx;color:#ffd700;font-weight:600}
