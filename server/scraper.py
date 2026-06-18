@@ -632,7 +632,7 @@ def scrape_zhipu(models):
 
 
 
-# Kimi
+# Kimi — 页面为 Mintlify JS 渲染，curl 无法可靠提取价格
 def scrape_kimi(models):
     try:
         html = fetch("https://platform.moonshot.cn/docs/pricing")
@@ -640,13 +640,18 @@ def scrape_kimi(models):
         for m in find_models(models, "", provider="Kimi"):
             m["stale"] = True
         return
-    # 简单正则提取
+    # 尝试正则提取（页面可能已改版）
+    updated = 0
     m = re.search(r"kimi-k2\.5[\s\S]{0,500}?([\d.]+)\s*元[\s\S]{0,200}?([\d.]+)\s*元", html, re.I)
     if m:
         ip, op = float(m.group(1)), float(m.group(2))
         for mod in find_models(models, "Kimi-K2.5", provider="Kimi"):
             mod["i"], mod["o"] = ip, op
             mod.pop("stale", None)
+            updated += 1
+    if not updated:
+        for m in find_models(models, "", provider="Kimi"):
+            m["stale"] = True
 
 # MiniMax
 def scrape_minimax(models):
@@ -668,34 +673,86 @@ def scrape_minimax(models):
         for m in find_models(models, "", provider="MiniMax"):
             m["stale"] = True
 
-# OpenAI (预期被 Cloudflare 拦截)
+# Gemini — 从 SSR HTML 表格提取 Standard 层级价格（强制英文页面）
+def scrape_gemini(models):
+    """从 ai.google.dev/gemini-api/docs/pricing 提取价格"""
+    try:
+        resp = requests.get(
+            "https://ai.google.dev/gemini-api/docs/pricing",
+            headers={"User-Agent": UA, "Accept-Language": "en-US,en;q=0.9"},
+            timeout=15
+        )
+        resp.raise_for_status()
+        html = resp.text
+    except Exception:
+        for m in find_models(models, "", provider="Gemini"):
+            m["stale"] = True
+        return
+
+    # 模型名 → 页面 heading id
+    MODEL_MAP = {
+        "Gemini-2.5-Pro": "gemini-2.5-pro",
+        "Gemini-2.5-Flash": "gemini-2.5-flash",
+    }
+
+    updated = 0
+    for model_name, heading_id in MODEL_MAP.items():
+        heading_match = re.search(rf'id="{heading_id}"', html)
+        if not heading_match:
+            continue
+
+        section = html[heading_match.start():heading_match.start() + 8000]
+        table_match = re.search(r'<table[^>]*>(.*?)</table>', section, re.DOTALL)
+        if not table_match:
+            continue
+
+        table_text = re.sub(r'<[^>]+>', ' ', table_match.group(1))
+        table_text = re.sub(r'\s+', ' ', table_text).strip()
+
+        inp = re.search(r'Input price[^$]*?\$([\d.]+)', table_text)
+        outp = re.search(r'Output price[^$]*?\$([\d.]+)', table_text)
+        cache = re.search(r'Context caching[^$]*?\$([\d.]+)', table_text)
+
+        if inp and outp:
+            ip = float(inp.group(1))
+            op = float(outp.group(1))
+            for mod in find_models(models, model_name, provider="Gemini"):
+                mod["i"] = ip
+                mod["o"] = op
+                if cache:
+                    mod["cp"] = float(cache.group(1))
+                mod.pop("stale", None)
+                updated += 1
+
+    if not updated:
+        for m in find_models(models, "", provider="Gemini"):
+            m["stale"] = True
+
+
+# OpenAI — Cloudflare 拦截 (Forbidden)，无法抓取
 def scrape_openai(models):
     try:
-        fetch("https://platform.openai.com/docs/pricing", timeout=10)
+        resp = requests.get(
+            "https://platform.openai.com/docs/pricing",
+            headers={"User-Agent": UA, "Accept-Language": "zh-CN,zh;q=0.9"},
+            timeout=10
+        )
+        if resp.status_code == 403:
+            raise Exception("Cloudflare blocked")
     except Exception:
         pass
     for m in find_models(models, "", provider="OpenAI"):
         m["stale"] = True
 
-# Gemini (预期被拦截)
-def scrape_gemini(models):
-    try:
-        fetch("https://ai.google.dev/pricing", timeout=10)
-    except Exception:
-        pass
-    for m in find_models(models, "", provider="Gemini"):
-        m["stale"] = True
 
-# Anthropic (预期被拦截)
+# Anthropic — Webflow/Mintlify JS 渲染，curl 无法提取价格
 def scrape_anthropic(models):
     try:
-        fetch("https://www.anthropic.com/pricing", timeout=10)
+        fetch("https://docs.anthropic.com/en/docs/about-claude/pricing", timeout=10)
     except Exception:
         pass
     for m in find_models(models, "", provider="Anthropic"):
-        m["stale"] = True
-
-# ============================================================
+        m["stale"] = True# ============================================================
 # 主函数
 # ============================================================
 
