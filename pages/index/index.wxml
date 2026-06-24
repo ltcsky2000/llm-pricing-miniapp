@@ -7,11 +7,6 @@
       </view>
     </view>
     <text class="subtitle">单位：元/百万tokens</text>
-    <!-- 转发按钮 -->
-    <button class="share-btn" open-type="share" hover-class="share-btn-hover">
-      <text class="share-icon">📤</text>
-      <text>推荐给朋友</text>
-    </button>
     <!-- 双数据源 -->
     <view class="source-row">
       <view class="source-item {{activeSource === 'selfhosted' ? 'active' : ''}} {{selfhosted.connected ? '' : 'disabled'}}" bindtap="onSwitchSource" data-source="selfhosted">
