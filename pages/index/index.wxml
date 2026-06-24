@@ -54,18 +54,18 @@
       <view class="price-row">
         <view class="price-item">
           <text class="price-label">输入</text>
-          <text class="price-value">¥{{item.inputPrice}}</text>
+          <text class="price-value">{{item.currency || "¥"}}{{item.inputPrice}}</text>
           <text class="price-note" wx:if="{{item.inputNote}}">{{item.inputNote}}</text>
         </view>
         <view class="price-divider"></view>
         <view class="price-item">
           <text class="price-label">输出</text>
-          <text class="price-value">¥{{item.outputPrice}}</text>
+          <text class="price-value">{{item.currency || "¥"}}{{item.outputPrice}}</text>
           <text class="price-note" wx:if="{{item.outputNote}}">{{item.outputNote}}</text>
         </view>
       </view>
       <view class="cache-row" wx:if="{{item.cachePrice}}">
-        <text class="cache-label">缓存命中:</text><text class="cache-value">¥{{item.cachePrice}}</text>
+        <text class="cache-label">缓存命中:</text><text class="cache-value">{{item.currency || "¥"}}{{item.cachePrice}}</text>
       </view>
       <view class="context-info" wx:if="{{item.contextWindow}}">上下文: {{item.contextWindow}}</view>
     </view>
