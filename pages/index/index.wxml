@@ -1,21 +1,23 @@
 <view class="container">
   <view class="header">
     <view class="header-title-row">
-      <image class="header-logo" src="/images/chinatelcom.png" mode="aspectFit"></image>
-      <text class="title">大模型Token价格</text>
+      <view class="title-wrapper">
+        <image class="header-logo" src="/images/chinatelcom.png" mode="aspectFit"></image>
+        <text class="title">LLM Tokens Market</text>
+      </view>
     </view>
     <text class="subtitle">单位：元/百万tokens</text>
     <!-- 双数据源 -->
     <view class="source-row">
       <view class="source-item {{activeSource === 'selfhosted' ? 'active' : ''}} {{selfhosted.connected ? '' : 'disabled'}}" bindtap="onSwitchSource" data-source="selfhosted">
         <text class="source-icon">{{selfhosted.icon}}</text>
-        <text class="source-name">{{selfhosted.label}}</text>
+        <text class="source-name">主数据源</text>
         <text class="source-time {{selfhosted.color}}">{{selfhosted.updateTime || '连接中...'}}</text>
       </view>
       <view class="source-divider"></view>
       <view class="source-item {{activeSource === 'cloud' ? 'active' : ''}} {{cloud.connected ? '' : 'disabled'}}" bindtap="onSwitchSource" data-source="cloud">
         <text class="source-icon">{{cloud.icon}}</text>
-        <text class="source-name">{{cloud.label}}</text>
+        <text class="source-name">备份源</text>
         <text class="source-time {{cloud.color}}">{{cloud.updateTime || '连接中...'}}</text>
       </view>
     </view>

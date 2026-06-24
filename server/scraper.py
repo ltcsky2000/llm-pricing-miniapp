@@ -179,16 +179,6 @@ SEED_DATA = [
     "d":"Qwen旗舰推理",
     "id":18,
     "tg":"🧠 推理"},
-  {    "n":"Qwen3.7-Max",
-    "p":"阿里百炼",
-    "pc":"#FF6A00",
-    "i":2,
-    "o":8,
-    "cw":"128K",
-    "t":"旗舰模型",
-    "d":"通义千问最强",
-    "isHot":True,
-    "id":20},
   {    "n":"DeepSeek-V4-Pro",
     "p":"DeepSeek",
     "pc":"#4D6BFE",
@@ -398,20 +388,31 @@ SEED_DATA = [
     "t":"Embedding",
     "id":40,
     "tg":"📊 嵌入"},
-{"n":"Kimi-K2.5-Thinking","p":"Kimi","pc":"#FF6B9D","i":1.0,"o":4.0,"cw":"128K","t":"旗舰模型","cap":"思考/推理","d":"月之暗面旗舰","isHot":True,"id":50,"tg":"🧠 推理"},
-  {"n":"Kimi-K2.5","p":"Kimi","pc":"#FF6B9D","i":1.0,"o":4.0,"cw":"128K","t":"旗舰模型","d":"月之暗面","id":51},
-  {"n":"Kimi-K2.0","p":"Kimi","pc":"#FF6B9D","i":0.5,"o":1.5,"cw":"128K","t":"通用模型","d":"高性价比","id":52},
-  {"n":"abab7","p":"MiniMax","pc":"#FF4500","i":2.0,"o":8.0,"cw":"256K","t":"旗舰模型","d":"MiniMax旗舰","id":53},
-  {"n":"abab6.5s","p":"MiniMax","pc":"#FF4500","i":0.5,"o":1.5,"cw":"128K","t":"通用模型","d":"MiniMax轻量","id":54},
-  {"n":"MiniMax-Text-01","p":"MiniMax","pc":"#FF4500","i":1.0,"o":4.0,"cw":"256K","t":"通用模型","id":55},
-  {"n":"GPT-4o","p":"OpenAI","pc":"#10A37F","i":17.5,"o":70.0,"cw":"128K","t":"旗舰模型","cap":"多模态","d":"OpenAI旗舰","isHot":True,"id":56},
-  {"n":"GPT-4o-mini","p":"OpenAI","pc":"#10A37F","i":1.05,"o":4.2,"cw":"128K","t":"轻量模型","d":"高性价比","id":57},
-  {"n":"o4-mini","p":"OpenAI","pc":"#10A37F","i":7.7,"o":30.8,"cw":"200K","t":"推理模型","cap":"思考/推理","d":"o系列推理","id":58,"tg":"🧠 推理"},
+{"n":"Kimi-K2.7-Code","p":"Kimi","pc":"#FF6B9D","i":6.50,"o":27.0,"cp":1.30,"cw":"262K","t":"编程模型","cap":"代码生成","d":"Kimi最强代码模型","isHot":True,"id":66},
+  {"n":"Kimi-K2.7-Code-Highspeed","p":"Kimi","pc":"#FF6B9D","i":13.0,"o":54.0,"cp":2.60,"cw":"262K","t":"编程模型","d":"K2.7高速版","id":67},
+  {"n":"Kimi-K2.6","p":"Kimi","pc":"#FF6B9D","i":6.50,"o":27.0,"cp":1.10,"cw":"262K","t":"旗舰模型","cap":"多模态/思考","d":"Kimi多模态旗舰","id":68},
+  {"n":"Kimi-K2.5","p":"Kimi","pc":"#FF6B9D","i":4.0,"o":21.0,"cp":0.70,"cw":"262K","t":"旗舰模型","cap":"多模态/思考","d":"月之暗面旗舰","isHot":True,"id":51,"tg":"🧠 推理"},
+    {"n":"qwen3.7-max","p":"阿里百炼","pc":"#FF6A00","i":12.0,"o":36.0,"cw":"1M","t":"旗舰模型","d":"阿里千问旗舰","isHot":True,"s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":38},
+  {"n":"qwen3.7-plus","p":"阿里百炼","pc":"#FF6A00","i":2.0,"o":8.0,"cw":"1M","t":"中杯模型","d":"百炼高性价比","in_":"≤256K","s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":39},
+  {"n":"qwq-plus","p":"阿里百炼","pc":"#FF6A00","i":1.6,"o":4.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"百炼推理模型","s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":40,"tg":"🧠 推理"},
+  {"n":"deepseek-v4-pro","p":"阿里百炼","pc":"#FF6A00","i":12.0,"o":24.0,"cw":"1M","t":"旗舰模型","cap":"上下文缓存","d":"百炼平台旗舰","in_":"缓存折扣","s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":41},
+  {"n":"deepseek-v4-flash","p":"阿里百炼","pc":"#FF6A00","i":1.0,"o":2.0,"cw":"1M","t":"轻量模型","cap":"上下文缓存","d":"百炼平台轻量","in_":"缓存折扣","s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":42},
+  {"n":"kimi-k2.6","p":"阿里百炼","pc":"#FF6A00","i":6.5,"o":27.0,"cw":"1M","t":"旗舰模型","cap":"思考/推理","d":"月之暗面Kimi","s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":43},
+  {"n":"glm-5.1","p":"阿里百炼","pc":"#FF6A00","i":6.0,"o":24.0,"cw":"200K","t":"旗舰模型","cap":"思考/推理","d":"智谱旗舰GLM","in_":"≤32K","s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":44},
+  {"n":"MiniMax-M2.7","p":"阿里百炼","pc":"#FF6A00","i":2.1,"o":8.4,"cw":"128K","t":"中杯模型","cap":"思考/推理","d":"稀宇科技Minimax","s":["https://help.aliyun.com/zh/model-studio/model-pricing"],"id":45},
+{"n":"MiniMax-M3","p":"MiniMax","pc":"#FF4500","i":2.1,"o":8.4,"cp":0.42,"cw":"512K","t":"旗舰模型","cap":"Agent/工具/多模态","d":"MiniMax最新旗舰Agent模型","isHot":True,"id":70,"tg":"🧠 推理"},
+  {"n":"MiniMax-M2.7","p":"MiniMax","pc":"#FF4500","i":2.1,"o":8.4,"cp":0.42,"cw":"256K","t":"旗舰模型","cap":"多模态","d":"M2.7旗舰","id":71},
+  {"n":"MiniMax-M2.5","p":"MiniMax","pc":"#FF4500","i":2.1,"o":8.4,"cp":0.21,"cw":"256K","t":"高性能","d":"M2.5高性价比","id":72},
+  {"n":"MiniMax-M2.1","p":"MiniMax","pc":"#FF4500","i":2.1,"o":8.4,"cp":0.21,"cw":"256K","t":"通用模型","d":"M2.1标准版","id":73},
+  {"n":"GPT-5.5","p":"OpenAI","pc":"#10A37F","i":5.0,"o":30.0,"cp":0.50,"cw":"270K","t":"旗舰模型","cap":"编码/专业工作","d":"OpenAI最强旗舰","isHot":True,"id":80},
+  {"n":"GPT-5.4","p":"OpenAI","pc":"#10A37F","i":2.50,"o":15.0,"cp":0.25,"cw":"270K","t":"高性能","d":"高性价比旗舰","id":81},
+  {"n":"GPT-5.4-mini","p":"OpenAI","pc":"#10A37F","i":0.75,"o":4.50,"cp":0.075,"cw":"270K","t":"轻量模型","d":"最强mini模型","id":82},
   {"n":"Gemini-2.5-Pro","p":"Gemini","pc":"#4285F4","i":8.75,"o":35.0,"cw":"1M","t":"旗舰模型","cap":"多模态/思考","d":"G家旗舰","isHot":True,"id":60},
   {"n":"Gemini-2.5-Flash","p":"Gemini","pc":"#4285F4","i":1.05,"o":4.2,"cw":"1M","t":"轻量模型","d":"G家轻量","id":61},
-  {"n":"Claude-Sonnet-4","p":"Anthropic","pc":"#D4A574","i":21.0,"o":105.0,"cw":"200K","t":"旗舰模型","cap":"编程/推理","d":"Claude旗舰","isHot":True,"id":63},
-  {"n":"Claude-Haiku-4","p":"Anthropic","pc":"#D4A574","i":5.6,"o":28.0,"cw":"200K","t":"轻量模型","d":"Claude轻量","id":64},
-  {"n":"Claude-Opus-4","p":"Anthropic","pc":"#D4A574","i":105.0,"o":525.0,"cw":"200K","t":"旗舰模型","cap":"最强推理","d":"Claude顶配","id":65},
+  {"n":"Fable 5","p":"Anthropic","pc":"#D4A574","i":10.0,"o":50.0,"cp":12.50,"cw":"200K","t":"旗舰模型","cap":"Agent/长任务","d":"Claude最强旗舰","isHot":True,"id":90},
+  {"n":"Opus 4.8","p":"Anthropic","pc":"#D4A574","i":5.0,"o":25.0,"cp":6.25,"cw":"200K","t":"旗舰模型","cap":"编程/企业","d":"复杂agentic编程","id":91},
+  {"n":"Sonnet 4.6","p":"Anthropic","pc":"#D4A574","i":3.0,"o":15.0,"cp":3.75,"cw":"200K","t":"高性能","d":"智能与速度平衡","id":92},
+  {"n":"Haiku 4.5","p":"Anthropic","pc":"#D4A574","i":1.0,"o":5.0,"cp":1.25,"cw":"200K","t":"轻量模型","d":"最快最经济","id":93},
 ]
 
 # ============================================================
@@ -481,15 +482,33 @@ def scrape_deepseek(models):
 
 
 def scrape_bailian(models):
-    """阿里百炼定价页"""
+    """阿里百炼定价页 — 覆盖全部模型"""
     html = fetch("https://help.aliyun.com/zh/model-studio/model-pricing")
     if not html:
         return
-    m = re.search(r"qwen3\.7[.-]max[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,200}?([\d.]+)\s*元", html, re.I)
-    if m:
-        ip, op = float(m.group(1)), float(m.group(2))
-        for mod in find_models(models, "qwen3.7-max"):
-            mod["i"], mod["o"] = ip, op
+    updated = 0
+    # 所有百炼模型名 → 页面上的匹配模式
+    model_pats = [
+        ("qwen3.7-max", r"qwen3\.7[.-]max[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,200}?([\d.]+)\s*元"),
+        ("qwen3.7-plus", r"qwen3\.7-plus[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,100}?([\d.]+)\s*元"),
+        ("qwq-plus", r"qwq-plus[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,100}?([\d.]+)\s*元"),
+        ("deepseek-v4-pro", r"deepseek-v4-pro[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,100}?([\d.]+)\s*元"),
+        ("deepseek-v4-flash", r"deepseek-v4-flash[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,100}?([\d.]+)\s*元"),
+        ("kimi-k2.6", r"kimi-k2\.6[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,100}?([\d.]+)\s*元"),
+        ("glm-5.1", r"glm-5\.1[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,100}?([\d.]+)\s*元"),
+        ("MiniMax-M2.7", r"MiniMax-M2\.7[\s\S]{0,300}?([\d.]+)\s*元[\s\S]{0,100}?([\d.]+)\s*元"),
+    ]
+    for model_name, pat in model_pats:
+        m = re.search(pat, html, re.I)
+        if m:
+            ip, op = float(m.group(1)), float(m.group(2))
+            for mod in models:
+                if mod.get("n") == model_name and mod.get("p") == "阿里百炼":
+                    mod["i"], mod["o"] = ip, op
+                    mod.pop("stale", None)
+                    updated += 1
+    if updated:
+        print(f"[阿里百炼] 更新 {updated} 个模型价格")
 
 
 def scrape_ctyun(models):
@@ -632,43 +651,92 @@ def scrape_zhipu(models):
 
 
 
-# Kimi — 页面为 Mintlify JS 渲染，curl 无法可靠提取价格
+# Kimi — 从各模型子页面提取定价（SSR RSC payload, curl 可行）
 def scrape_kimi(models):
-    try:
-        html = fetch("https://platform.moonshot.cn/docs/pricing")
-    except Exception:
-        for m in find_models(models, "", provider="Kimi"):
-            m["stale"] = True
-        return
-    # 尝试正则提取（页面可能已改版）
     updated = 0
-    m = re.search(r"kimi-k2\.5[\s\S]{0,500}?([\d.]+)\s*元[\s\S]{0,200}?([\d.]+)\s*元", html, re.I)
-    if m:
-        ip, op = float(m.group(1)), float(m.group(2))
-        for mod in find_models(models, "Kimi-K2.5", provider="Kimi"):
-            mod["i"], mod["o"] = ip, op
-            mod.pop("stale", None)
-            updated += 1
-    if not updated:
-        for m in find_models(models, "", provider="Kimi"):
-            m["stale"] = True
+    kimi_models = find_models(models, "", provider="Kimi")
 
-# MiniMax
-def scrape_minimax(models):
+    pages = [
+        ("https://platform.kimi.com/docs/pricing/chat-k25", "Kimi-K2.5"),
+        ("https://platform.kimi.com/docs/pricing/chat-k26", "Kimi-K2.6"),
+    ]
+    for url, name_pat in pages:
+        try:
+            html = fetch(url)
+            # SSR payload: rows: [["model", "1M tokens", "¥cp", "¥ip", "¥op", ...]]
+            # 用 re.escape 转义模型名中的特殊字符，然后匹配三个 ¥价格
+            pat = re.escape(name_pat) + r"[\s\S]{0,300}?¥([\d.]+)[\s\S]{0,60}?¥([\d.]+)[\s\S]{0,60}?¥([\d.]+)"
+            m = re.search(pat, html)
+            if m:
+                cp, ip, op = float(m.group(1)), float(m.group(2)), float(m.group(3))
+                for mod in find_models(models, name_pat, provider="Kimi"):
+                    mod["i"], mod["o"] = ip, op
+                    mod["cp"] = cp
+                    mod.pop("stale", None)
+                    updated += 1
+        except Exception:
+            pass
+
+    # K2.7 Code — 同一页面有两个变体，按出现顺序分配
     try:
-        html = fetch("https://platform.minimaxi.com/document/price")
-    except Exception:
-        for m in find_models(models, "", provider="MiniMax"):
-            m["stale"] = True
-        return
-    updated = 0
-    for name in ["abab7", "abab6.5s", "MiniMax-Text-01"]:
-        m = re.search(name.replace(".", "\\.") + r"[\s\S]{0,300}?([\d.]+)[\s\S]{0,100}?([\d.]+)", html, re.I)
-        if m:
-            for mod in find_models(models, name, provider="MiniMax"):
-                mod["i"], mod["o"] = float(m.group(1)), float(m.group(2))
+        html = fetch("https://platform.kimi.com/docs/pricing/chat-k27-code")
+        matches = list(re.finditer(
+            r"kimi-k2\.7-code[\s\S]{0,200}?¥([\d.]+)[\s\S]{0,50}?¥([\d.]+)[\s\S]{0,50}?¥([\d.]+)",
+            html
+        ))
+        model_names = ["Kimi-K2.7-Code", "Kimi-K2.7-Code-Highspeed"]
+        for i, match in enumerate(matches):
+            if i >= len(model_names):
+                break
+            cp, ip, op = float(match.group(1)), float(match.group(2)), float(match.group(3))
+            name = model_names[i]
+            for mod in find_models(models, name, provider="Kimi"):
+                mod["i"], mod["o"] = ip, op
+                mod["cp"] = cp
                 mod.pop("stale", None)
                 updated += 1
+    except Exception:
+        pass
+
+    if not updated:
+        for m in kimi_models:
+            m["stale"] = True
+
+# MiniMax — 从按量计费文档提取定价（strip HTML 后 regex）
+def scrape_minimax(models):
+    updated = 0
+    try:
+        raw = fetch("https://platform.minimaxi.com/docs/guides/pricing-paygo")
+        html = re.sub(r"<[^>]+>", " ", raw)
+        html = re.sub(r"\s+", " ", html)
+
+        # M3 — 永久五折，取折后价（每对价格中第二个）
+        m3m = re.search(
+            r"MiniMax-M3.{0,200}?永久五折.{0,300}?([\d.]+)\s+([\d.]+).{0,80}?([\d.]+)\s+([\d.]+).{0,80}?([\d.]+)\s+([\d.]+)",
+            html
+        )
+        if m3m:
+            ip, op, cp = float(m3m.group(2)), float(m3m.group(4)), float(m3m.group(6))
+            for mod in find_models(models, "MiniMax-M3", provider="MiniMax"):
+                mod["i"], mod["o"], mod["cp"] = ip, op, cp
+                mod.pop("stale", None)
+                updated += 1
+
+        # 其他 M 系列 — 格式: 模型名 输入 输出 缓存读取 缓存写入
+        for name in ["MiniMax-M2.7", "MiniMax-M2.5", "MiniMax-M2.1"]:  # M2 会子串匹配覆盖所有 M 系列
+            m = re.search(
+                re.escape(name) + r".{0,200}?([\d.]+)\s+([\d.]+).{0,80}?([\d.]+)\s+([\d.]+)",
+                html
+            )
+            if m:
+                ip, op, cp = float(m.group(1)), float(m.group(2)), float(m.group(3))
+                for mod in find_models(models, name, provider="MiniMax"):
+                    mod["i"], mod["o"], mod["cp"] = ip, op, cp
+                    mod.pop("stale", None)
+                    updated += 1
+    except Exception:
+        pass
+
     if not updated:
         for m in find_models(models, "", provider="MiniMax"):
             m["stale"] = True
@@ -729,30 +797,130 @@ def scrape_gemini(models):
             m["stale"] = True
 
 
-# OpenAI — Cloudflare 拦截 (Forbidden)，无法抓取
+# OpenAI — 从官方定价页提取（SSR HTML, curl可行，不再被Cloudflare拦截）
 def scrape_openai(models):
+    updated = 0
     try:
-        resp = requests.get(
-            "https://platform.openai.com/docs/pricing",
-            headers={"User-Agent": UA, "Accept-Language": "zh-CN,zh;q=0.9"},
-            timeout=10
-        )
-        if resp.status_code == 403:
-            raise Exception("Cloudflare blocked")
+        raw = fetch("https://openai.com/zh-Hans-CN/api/pricing/")
+        html = re.sub(r"<[^>]+>", " ", raw)
+        html = re.sub(r"\s+", " ", html)
+
+        # GPT-5.5: 输入→缓存输入→输出
+        m55 = re.search(r"GPT-5\.5.{0,300}?US\$([\d.]+).{0,80}?US\$([\d.]+).{0,80}?US\$([\d.]+)", html)
+        if m55:
+            ip, cp, op = float(m55.group(1)), float(m55.group(2)), float(m55.group(3))
+            for mod in models:
+                if mod.get("n") == "GPT-5.5" and mod.get("p") == "OpenAI":
+                    mod["i"], mod["o"], mod["cp"] = ip, op, cp
+                    mod.pop("stale", None)
+                    updated += 1
+
+        # GPT-5.4 系列（先 mini 再标准版，避免子串覆盖）
+        for pat, model_name in [(r"GPT-5\.4\smini", "GPT-5.4-mini"), (r"GPT-5\.4\s(?!mini)", "GPT-5.4")]:
+            m = re.search(pat + r".{0,300}?US\$([\d.]+).{0,80}?US\$([\d.]+).{0,80}?US\$([\d.]+)", html)
+            if m:
+                ip, cp, op = float(m.group(1)), float(m.group(2)), float(m.group(3))
+                for mod in models:
+                    if mod.get("n") == model_name and mod.get("p") == "OpenAI":
+                        mod["i"], mod["o"], mod["cp"] = ip, op, cp
+                        mod.pop("stale", None)
+                        updated += 1
     except Exception:
         pass
-    for m in find_models(models, "", provider="OpenAI"):
-        m["stale"] = True
+
+    if not updated:
+        for m in find_models(models, "", provider="OpenAI"):
+            m["stale"] = True
 
 
-# Anthropic — Webflow/Mintlify JS 渲染，curl 无法提取价格
+# Anthropic/Claude — 通过 Browserless CDP 提取（JS渲染页）
+BROWSERLESS_WS = "ws://api.ltcsky.net:3000/chrome"
+BROWSERLESS_HTTP = "http://api.ltcsky.net:3000"
+
+def _browser_fetch(url, wait=10):
+    """通过 Browserless CDP 获取页面渲染后的 innerText"""
+    import asyncio, json as _json
+    try:
+        import websockets as _ws, urllib.request as _ur
+    except ImportError:
+        print("[Browserless] websockets not installed, skip")
+        return ""
+    
+    async def _send_wait(ws, payload, timeout=20):
+        await ws.send(_json.dumps(payload))
+        msg_id = payload["id"]
+        while True:
+            r = _json.loads(await asyncio.wait_for(ws.recv(), timeout=timeout))
+            if r.get("id") == msg_id:
+                return r
+    
+    async def _do():
+        try:
+            async with _ws.connect(BROWSERLESS_WS, open_timeout=12, ping_interval=None):
+                req = _ur.Request(f"{BROWSERLESS_HTTP}/json/list")
+                targets = _json.loads(_ur.urlopen(req, timeout=5).read())
+                if not targets:
+                    return ""
+                ws_url = targets[0]["webSocketDebuggerUrl"].replace("0.0.0.0", "api.ltcsky.net")
+                
+                async with _ws.connect(ws_url, open_timeout=10, ping_interval=None) as ws:
+                    await _send_wait(ws, {"id":1,"method":"Page.enable"})
+                    await _send_wait(ws, {"id":2,"method":"Page.navigate","params":{"url":url}}, timeout=25)
+                    
+                    # Wait for load
+                    try:
+                        while True:
+                            r = _json.loads(await asyncio.wait_for(ws.recv(), timeout=30))
+                            if r.get("method") == "Page.loadEventFired":
+                                break
+                    except:
+                        pass
+                    await asyncio.sleep(wait)
+                    
+                    # Extract text
+                    r = await _send_wait(ws, {"id":9,"method":"Runtime.evaluate","params":{
+                        "expression":"document.body.innerText","returnByValue":True}})
+                    return r.get("result",{}).get("result",{}).get("value","")
+        except Exception:
+            return ""
+    
+    try:
+        return asyncio.run(_do())
+    except:
+        return ""
+
 def scrape_anthropic(models):
+    updated = 0
+    anthropic_models = find_models(models, "", provider="Anthropic")
     try:
-        fetch("https://docs.anthropic.com/en/docs/about-claude/pricing", timeout=10)
-    except Exception:
-        pass
-    for m in find_models(models, "", provider="Anthropic"):
-        m["stale"] = True# ============================================================
+        text = _browser_fetch("https://claude.com/pricing#api", wait=8)
+        if not text:
+            raise Exception("Browserless returned empty")
+        
+        # Parse pricing from text (format: "Fable 5\nInput\n$10 / MTok...")
+        for model_name in ["Fable 5", "Opus 4.8", "Sonnet 4.6", "Haiku 4.5"]:
+            idx = text.find(model_name)
+            if idx < 0:
+                continue
+            chunk = text[idx:idx+400]
+            inp = re.search(r'Input\s*\n?\$([\d.]+)\s*/\s*MTok', chunk)
+            outp = re.search(r'Output\s*\n?\$([\d.]+)\s*/\s*MTok', chunk)
+            cache_w = re.search(r'Write\s*\n?\$([\d.]+)\s*/\s*MTok', chunk)
+            cache_r = re.search(r'Read\s*\n?\$([\d.]+)\s*/\s*MTok', chunk)
+            if inp and outp:
+                ip, op = float(inp.group(1)), float(outp.group(1))
+                cp = float(cache_w.group(1)) if cache_w else None
+                for mod in find_models(models, model_name, provider="Anthropic"):
+                    mod["i"], mod["o"] = ip, op
+                    if cp: mod["cp"] = cp
+                    mod.pop("stale", None)
+                    updated += 1
+    except Exception as e:
+        print(f"[Anthropic] Browserless failed: {e}")
+    
+    if not updated:
+        for m in anthropic_models:
+            m["stale"] = True# ============================================================
 # 主函数
 # ============================================================
 
@@ -778,6 +946,14 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
             providers = list({m["p"] for m in new_models})
             print(f"[MERGE] 新增 {len(new_models)} 个模型 ({', '.join(providers)})")
         print(f"[LOAD] {len(models)} 条")
+
+    # 清理不在种子数据中的旧模型（已下架/改名）
+    seed_ids = {m["id"] for m in SEED_DATA}
+    removed = [m for m in models if m["id"] not in seed_ids]
+    if removed:
+        models = [m for m in models if m["id"] in seed_ids]
+        removed_names = [f'{m["n"]}({m["p"]})' for m in removed]
+        print(f"[CLEAN] 移除 {len(removed)} 个已下架模型: {', '.join(removed_names)}")
 
     errors = []
 

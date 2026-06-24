@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "大模型Token价格",
+  "navigationBarTitleText": "词元价格计算器",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark"
 }

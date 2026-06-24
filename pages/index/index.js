@@ -8,8 +8,8 @@ Page({
     loading: true,
     // 双数据源
     activeSource: 'selfhosted',
-    selfhosted: { label: '自建', icon: '🏠', updateTime: '', connected: false, color: 'gray' },
-    cloud: { label: '云端', icon: '☁️', updateTime: '', connected: false, color: 'gray' },
+    selfhosted: { label: '主数据源', icon: '🏠', updateTime: '', connected: false, color: 'gray' },
+    cloud: { label: '备份源', icon: '☁️', updateTime: '', connected: false, color: 'gray' },
     // 厂商标签
     providerTags: [],
     activeProvider: '天翼云'
