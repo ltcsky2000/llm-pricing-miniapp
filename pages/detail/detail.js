@@ -4,9 +4,36 @@ Page({
   onLoad: function(o) {
     var self = this
     var id = parseInt(o.id)
+    self._modelId = id
     var app = getApp()
     var ds = app.globalData.getDataSource()
     self.fetchModel(id, ds === 'cloud' ? 'cloud' : 'selfhosted')
+
+    // 开启转发功能
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    })
+  },
+
+  onShareAppMessage: function() {
+    var model = this.data.model || {}
+    var title = model.name ? '查看 ' + model.name + ' 价格详情' : '大模型API价格查询'
+    return {
+      title: title,
+      path: '/pages/detail/detail?id=' + (this._modelId || ''),
+      imageUrl: ''
+    }
+  },
+
+  onShareTimeline: function() {
+    var model = this.data.model || {}
+    var title = model.name ? model.name + ' 价格详情' : '大模型API价格查询'
+    return {
+      title: title,
+      query: 'id=' + (this._modelId || ''),
+      imageUrl: ''
+    }
   },
 
   fetchModel: function(id, source) {

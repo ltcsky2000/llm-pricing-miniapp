@@ -22,6 +22,28 @@ Page({
     if (ds === 'cloud') { self.setData({ activeSource: 'cloud' }) }
     else { self.setData({ activeSource: 'selfhosted' }) }
     self.probeBothSources()
+
+    // 开启转发功能 — 支持分享给好友和群聊
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    })
+  },
+
+  onShareAppMessage: function() {
+    return {
+      title: '词元价格计算器 — 大模型API价格实时查询',
+      path: '/pages/index/index',
+      imageUrl: ''
+    }
+  },
+
+  onShareTimeline: function() {
+    return {
+      title: '词元价格计算器 — 大模型API价格实时查询',
+      query: '',
+      imageUrl: ''
+    }
   },
 
   onPullDownRefresh: function() {
