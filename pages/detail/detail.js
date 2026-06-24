@@ -18,7 +18,7 @@ Page({
 
   onShareAppMessage: function() {
     var model = this.data.model || {}
-    var title = model.name ? '查看 ' + model.name + ' 价格详情' : '大模型API价格查询'
+    var title = model.name ? '查看 ' + model.name + ' 价格详情' : '词元价格计算器-大模型Tokens价格每日更新'
     return {
       title: title,
       path: '/pages/detail/detail?id=' + (this._modelId || ''),
@@ -28,7 +28,7 @@ Page({
 
   onShareTimeline: function() {
     var model = this.data.model || {}
-    var title = model.name ? model.name + ' 价格详情' : '大模型API价格查询'
+    var title = model.name ? model.name + ' 价格详情' : '词元价格计算器-大模型Tokens价格每日更新'
     return {
       title: title,
       query: 'id=' + (this._modelId || ''),

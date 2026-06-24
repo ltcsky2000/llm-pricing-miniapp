@@ -32,7 +32,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '词元价格计算器 — 大模型API价格实时查询',
+      title: '词元价格计算器-大模型Tokens价格每日更新',
       path: '/pages/index/index',
       imageUrl: ''
     }
@@ -40,7 +40,7 @@ Page({
 
   onShareTimeline: function() {
     return {
-      title: '词元价格计算器 — 大模型API价格实时查询',
+      title: '词元价格计算器-大模型Tokens价格每日更新',
       query: '',
       imageUrl: ''
     }
