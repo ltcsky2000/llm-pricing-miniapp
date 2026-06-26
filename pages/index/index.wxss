@@ -1,4 +1,4 @@
-.header{text-align:center;padding:40rpx 0 20rpx}.header-title-row{display:flex;align-items:center;justify-content:center}.title-wrapper{position:relative;display:inline-flex;align-items:center}.header-logo{width:150rpx;height:150rpx;display:block;border-radius:16rpx;position:absolute;right:100%;margin-right:6rpx}.title{font-size:40rpx;font-weight:700;color:#fff}.title{font-size:40rpx;font-weight:700;color:#fff;display:block}.subtitle{font-size:24rpx;color:#888;margin-top:10rpx;display:block}.subtitle-time{font-size:22rpx;color:#666;margin-top:6rpx;display:block}
+.header{text-align:center;padding:40rpx 0 20rpx}.header-title-row{display:flex;align-items:center;justify-content:center}.title-wrapper{position:relative;display:inline-flex;align-items:center}.header-logo{width:150rpx;height:150rpx;display:block;border-radius:16rpx;position:absolute;right:100%;margin-right:6rpx}.header-logo-right{width:38rpx;height:38rpx;display:block;border-radius:16rpx;position:absolute;left:100%;margin-left:4rpx}.title{font-size:40rpx;font-weight:700;color:#fff}.title{font-size:40rpx;font-weight:700;color:#fff;display:block}.subtitle{font-size:24rpx;color:#888;margin-top:10rpx;display:block}.subtitle-time{font-size:22rpx;color:#666;margin-top:6rpx;display:block}
 .source-row{display:flex;align-items:center;justify-content:center;gap:0;margin-top:16rpx;padding:10rpx 16rpx;background:rgba(255,255,255,.04);border-radius:24rpx;border:1rpx solid rgba(255,255,255,.06)}
 .source-item{display:flex;align-items:center;gap:8rpx;padding:8rpx 20rpx;border-radius:16rpx}
 .source-item.active{background:rgba(100,149,237,.15)}
@@ -27,3 +27,60 @@
 .empty-state{display:flex;flex-direction:column;align-items:center;padding:120rpx 0}.empty-icon{font-size:80rpx;margin-bottom:20rpx}.empty-text{font-size:28rpx;color:#666}
 .footer-note{text-align:center;padding:40rpx 0 60rpx;font-size:22rpx;color:#555}.footer-disclaimer{display:block;margin-top:8rpx;color:#444}
 .loading-bar{text-align:center;padding:60rpx 0}.loading-text{font-size:28rpx;color:#888}
+/* ============================================================
+   主 Tab 切换: Tokens / 算力
+   ============================================================ */
+.main-tab-item{flex:1;text-align:center;padding:12rpx 0;font-size:26rpx;color:#888;transition:all .2s}
+.main-tab-item.active{background:rgba(100,149,237,.2);color:#fff;font-weight:600}
+
+/* ============================================================
+   算力页
+   ============================================================ */
+.compute-meta{display:flex;flex-direction:column;align-items:center;margin-top:16rpx;gap:6rpx}
+.compute-time{font-size:22rpx;color:#888}
+.compute-summary{font-size:22rpx;color:#7eb8ff}
+
+/* 算力双筛选行 */
+.compute-filter-row{display:flex;gap:16rpx;margin:16rpx 0 10rpx}
+.compute-filter-half{flex:1;min-width:0}
+.picker-display{display:flex;align-items:center;padding:10rpx 16rpx;background:rgba(255,255,255,.06);border-radius:12rpx;border:1rpx solid rgba(255,255,255,.1);overflow:hidden}
+.picker-label{font-size:22rpx;color:#888;margin-right:6rpx;flex-shrink:0}
+.picker-display text:nth-child(2){font-size:24rpx;color:#e0e0e0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker-arrow{font-size:22rpx;color:#6495ed;margin-left:6rpx;flex-shrink:0}
+
+/* 售罄检查提示 */
+.sellout-checking{text-align:center;padding:12rpx 0;font-size:22rpx;color:#6495ed}
+
+/* GPU 卡片 */
+.compute-list{margin-top:10rpx}
+.compute-card{background:linear-gradient(135deg,#1a1a2e 0,#16213e 100%);border-radius:16rpx;padding:24rpx;margin-bottom:16rpx;border:1rpx solid rgba(255,255,255,.06)}
+.compute-card.sellout{opacity:.6;border-color:rgba(255,107,107,.2)}
+.compute-card-header{display:flex;align-items:center;gap:10rpx;margin-bottom:12rpx}
+.compute-badge{font-size:18rpx;padding:3rpx 12rpx;border-radius:8rpx;font-weight:500}
+.compute-badge.available{background:rgba(74,222,128,.15);color:#4ade80}
+.compute-badge.sold{background:rgba(255,107,107,.15);color:#f87171}
+.compute-region-tag{font-size:20rpx;color:#aaa;background:rgba(255,255,255,.06);padding:2rpx 10rpx;border-radius:6rpx}
+.compute-gpu-tag{font-size:20rpx;color:#ffd700;background:rgba(255,215,0,.1);padding:2rpx 10rpx;border-radius:6rpx;margin-left:auto}
+.compute-spec-name{font-size:30rpx;font-weight:600;color:#e8e8e8;margin-bottom:4rpx}
+.compute-flavor{font-size:22rpx;color:#888;margin-bottom:12rpx}
+.compute-specs{display:flex;gap:16rpx;margin-bottom:12rpx}
+.compute-spec-item{flex:1;text-align:center;background:rgba(255,255,255,.03);border-radius:10rpx;padding:8rpx 0}
+.cs-label{font-size:20rpx;color:#888;display:block;margin-bottom:2rpx}
+.cs-value{font-size:28rpx;color:#e0e0e0;font-weight:600;display:block}
+.compute-extra{display:flex;flex-direction:column;gap:4rpx}
+.compute-az{font-size:20rpx;color:#666}
+.compute-bw{font-size:20rpx;color:#666}
+
+/* ============================================================
+   底部 Tab 栏（浏览器标签页风格）
+   ============================================================ */
+.bottom-tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(245,245,250,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1rpx solid rgba(0,0,0,.08);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.bottom-tab-item{flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8rpx;padding:12rpx 0 10rpx;position:relative;transition:all .2s}
+.bottom-tab-item.active{background:rgba(100,149,237,.1)}
+.bottom-tab-icon{font-size:34rpx}
+.bottom-tab-label{font-size:36rpx;color:#999;transition:color .2s}
+.bottom-tab-item.active .bottom-tab-label{color:#4169e1;font-weight:700}
+.bottom-tab-indicator{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:40rpx;height:4rpx;background:#4169e1;border-radius:2rpx 2rpx 0 0}
+
+/* 内容区域需要留出底部 tab 的空间 */
+.content-area{padding-bottom:80rpx}

@@ -10,7 +10,7 @@ const SEED_DATA = [[{"n":"Qwen3-8B","p":"天翼云","pc":"#0078D4","i":0.3,"o":0
 const COLL = 'pricing'
 const DOC_ID = 'latest'
 
-function fetchUrl(url, timeout = 10000) {
+function fetchUrl(url, timeout = 5000) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36', 'Accept-Language': 'zh-CN,zh;q=0.9' },
@@ -26,8 +26,14 @@ function fetchUrl(url, timeout = 10000) {
 }
 
 async function loadModels() {
-  try { const r = await db.collection(COLL).doc(DOC_ID).get(); return r.data.models || [] }
-  catch (e) { return [] }
+  try {
+    const r = await db.collection(COLL).doc(DOC_ID).get()
+    // 兼容 {data:{models:[]}} 嵌套和 {models:[]} 扁平
+    var d = r.data
+    var models = d.models || (d.data && d.data.models) || []
+    console.log('[LOAD] ' + models.length + ' models (format: ' + (d.models ? 'flat' : 'nested') + ')')
+    return models
+  } catch (e) { return [] }
 }
 
 async function saveModels(models) {
@@ -134,43 +140,53 @@ async function scrapeCtyun(models) {
 }
 
 
-// Kimi — 从各模型子页面提取定价（SSR RSC payload, curl 可行）
+// Kimi — 从 SSR JSON payload 提取定价
 async function scrapeKimi(models) {
   let updated = 0
   const kimiModels = models.filter(m => m.p === 'Kimi')
 
+  // 所有 Kimi 定价页面列表: [url, 匹配的模型名]
   const pages = [
     ['https://platform.kimi.com/docs/pricing/chat-k25', 'Kimi-K2.5'],
     ['https://platform.kimi.com/docs/pricing/chat-k26', 'Kimi-K2.6'],
   ]
-  for (const [url, namePat] of pages) {
+
+  for (const [url, modelName] of pages) {
     try {
       const html = await fetchUrl(url)
       // SSR payload: rows: [["model", "1M tokens", "¥cp", "¥ip", "¥op", ...]]
-      // captures: ¥(cacheHit) ¥(inputPrice) ¥(outputPrice)
-      const m = html.match(new RegExp(namePat.replace(/\\./g,'\\\\.').replace(/-/g,'\\\\-') + '[\\\\s\\\\S]{0,300}?¥([\\\\d.]+)[\\\\s\\\\S]{0,60}?¥([\\\\d.]+)[\\\\s\\\\S]{0,60}?¥([\\\\d.]+)'))
-      if (m) {
-        const cp = parseFloat(m[1]), ip = parseFloat(m[2]), op = parseFloat(m[3])
-        findModel(models, namePat).filter(m => m.p === 'Kimi').forEach(mod => {
-          mod.i = ip; mod.o = op; mod.cp = cp; delete mod.stale; updated++
-        })
-      }
+      const rowsMatch = html.match(/rows:\s*\[([^\]]+)\]/)
+      if (!rowsMatch) continue
+      const prices = rowsMatch[1].match(/¥([\d.]+)/g)
+      if (!prices || prices.length < 3) continue
+      const cp = parseFloat(prices[0].slice(1))
+      const ip = parseFloat(prices[1].slice(1))
+      const op = parseFloat(prices[2].slice(1))
+      models.filter(m => m.n === modelName && m.p === 'Kimi').forEach(mod => {
+        mod.i = ip; mod.o = op; mod.cp = cp; delete mod.stale; updated++
+      })
     } catch (e) {}
   }
 
-  // K2.7 Code — 同一页面有两个变体
+  // K2.7 Code — 两个变体在同一页
   try {
     const html = await fetchUrl('https://platform.kimi.com/docs/pricing/chat-k27-code')
-    const re = /kimi-k2\\.7-code[^"]*"[^"]*"¥([\d.]+)"[^"]*"¥([\d.]+)"[^"]*"¥([\d.]+)"/g
-    let match, idx = 0
-    const modelNames = ['Kimi-K2.7-Code', 'Kimi-K2.7-Code-Highspeed']
-    while ((match = re.exec(html)) !== null && idx < modelNames.length) {
-      const cp = parseFloat(match[1]), ip = parseFloat(match[2]), op = parseFloat(match[3])
-      const name = modelNames[idx]
-      models.filter(m => m.n === name && m.p === 'Kimi').forEach(mod => {
-        mod.i = ip; mod.o = op; mod.cp = cp; delete mod.stale; updated++
-      })
-      idx++
+    const rowsMatches = html.match(/rows:\s*\[([^\]]+)\][^\]]*?\[([^\]]+)\]/)
+    if (rowsMatches) {
+      const pairs = [
+        { models: models.filter(m => m.n === 'Kimi-K2.7-Code' && m.p === 'Kimi'), prices: rowsMatches[1] },
+        { models: models.filter(m => m.n === 'Kimi-K2.7-Code-Highspeed' && m.p === 'Kimi'), prices: rowsMatches[2] }
+      ]
+      for (const pair of pairs) {
+        const ps = pair.prices.match(/¥([\d.]+)/g)
+        if (!ps || ps.length < 3) continue
+        const cp = parseFloat(ps[0].slice(1))
+        const ip = parseFloat(ps[1].slice(1))
+        const op = parseFloat(ps[2].slice(1))
+        pair.models.forEach(mod => {
+          mod.i = ip; mod.o = op; mod.cp = cp; delete mod.stale; updated++
+        })
+      }
     }
   } catch (e) {}
 
@@ -401,13 +417,13 @@ exports.main = async (event, context) => {
   let models = await loadModels()
   let isSeeded = false
   if (!models || models.length === 0) {
-    models = JSON.parse(JSON.stringify(SEED_DATA))
+    models = JSON.parse(JSON.stringify(SEED_DATA[0] || SEED_DATA))
     isSeeded = true
     console.log(`[INIT] 导入 ${models.length} 条种子数据`)
   } else {
     // 合并种子数据中的新模型（如硅基流动、智谱等新增供应商）
     const existingIds = new Set(models.map(m => m.id))
-    const newModels = SEED_DATA.filter(m => !existingIds.has(m.id))
+    const newModels = (SEED_DATA[0] || SEED_DATA).filter(m => !existingIds.has(m.id))
     if (newModels.length > 0) {
       models = models.concat(JSON.parse(JSON.stringify(newModels)))
       console.log(`[MERGE] 新增 ${newModels.length} 个模型（${newModels.map(m=>m.p).filter((v,i,a)=>a.indexOf(v)===i).join(', ')}）`)
@@ -416,7 +432,7 @@ exports.main = async (event, context) => {
   }
 
   // 清理不在种子数据中的旧模型（已下架/改名）
-  const seedIds = new Set(SEED_DATA.map(m => m.id))
+  const seedIds = new Set((SEED_DATA[0] || SEED_DATA).map(m => m.id))
   const removed = models.filter(m => !seedIds.has(m.id))
   if (removed.length > 0) {
     const removedNames = removed.map(m => m.n + '(' + m.p + ')').join(', ')
@@ -428,16 +444,22 @@ exports.main = async (event, context) => {
   const startTime = Date.now()
   console.log(`[TIMING] 开始爬取，种子 ${models.length} 个模型`)
 
-  try { await scrapeDeepSeek(models) } catch (e) { errors.push('DeepSeek: ' + e.message) }
-  try { await scrapeBailian(models) } catch (e) { errors.push('阿里百炼: ' + e.message) }
-  try { await scrapeCtyun(models) } catch (e) { errors.push('天翼云: ' + e.message) }
-  try { await scrapeSiliconFlow(models) } catch (e) { errors.push('硅基流动: ' + e.message) }
-  try { await scrapeZhipu(models) } catch (e) { errors.push('智谱: ' + e.message) }
-  try { await scrapeKimi(models) } catch (e) { errors.push('Kimi: ' + e.message) }
-  try { await scrapeMiniMax(models) } catch (e) { errors.push('MiniMax: ' + e.message) }
-  try { await scrapeOpenAI(models) } catch (e) { errors.push('OpenAI: ' + e.message) }
-  try { await scrapeGemini(models) } catch (e) { errors.push('Gemini: ' + e.message) }
-  try { await scrapeAnthropic(models) } catch (e) { errors.push('Anthropic: ' + e.message) }
+  // 并行爬取（每个爬虫只改自己厂商的模型，无冲突）
+  const scrapers = [
+    { name: 'DeepSeek', fn: () => scrapeDeepSeek(models) },
+    { name: '阿里百炼', fn: () => scrapeBailian(models) },
+    { name: '天翼云', fn: () => scrapeCtyun(models) },
+    { name: '硅基流动', fn: () => scrapeSiliconFlow(models) },
+    { name: '智谱', fn: () => scrapeZhipu(models) },
+    { name: 'Kimi', fn: () => scrapeKimi(models) },
+    { name: 'MiniMax', fn: () => scrapeMiniMax(models) },
+    { name: 'OpenAI', fn: () => scrapeOpenAI(models) },
+    { name: 'Gemini', fn: () => scrapeGemini(models) },
+    { name: 'Anthropic', fn: () => scrapeAnthropic(models) }
+  ]
+  await Promise.all(scrapers.map(s =>
+    s.fn().catch(e => { errors.push(s.name + ': ' + e.message) })
+  ))
 
   try { await saveModels(models); console.log(`[SAVE] ${models.length} 条 | 耗时 ${(Date.now()-startTime)/1000}s`) }
   catch (e) { errors.push('SaveFinal: ' + e.message) }

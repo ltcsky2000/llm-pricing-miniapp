@@ -6,10 +6,18 @@ const db = cloud.database()
 exports.main = async (event, context) => {
   try {
     const result = await db.collection('pricing').doc('latest').get()
+    var doc = result.data
+    // 兼容两种文档格式: {models:[]} 和 {data:{models:[]}}
+    var models = doc.models || (doc.data && doc.data.models) || []
+    // 兼容数组被误包一层的情况 [[...]] → [...]
+    if (models.length === 1 && Array.isArray(models[0])) {
+      models = models[0]
+    }
+    var updateTime = doc.updateTime || (doc.data && doc.data.updateTime) || ''
     return {
       code: 0,
-      data: result.data.models || [],
-      updateTime: result.data.updateTime || ''
+      data: models,
+      updateTime: updateTime
     }
   } catch (e) {
     // 数据库为空时，返回空数据让小程序用 fallback

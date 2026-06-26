@@ -1,18 +1,35 @@
+var util = require('../../utils/util.js')
+
 Page({
   data: {
+    // === Tokens Tab ===
     keyword: '',
     sortBy: 'input',
     sortAsc: true,
     filteredList: [],
     lastUpdate: '',
     loading: true,
-    // 双数据源
     activeSource: 'selfhosted',
     selfhosted: { label: '主数据源', icon: '🏠', updateTime: '', connected: false, color: 'gray' },
     cloud: { label: '备份源', icon: '☁️', updateTime: '', connected: false, color: 'gray' },
-    // 厂商标签
     providerTags: [],
-    activeProvider: '天翼云'
+    activeProvider: '天翼云',
+
+    // === Tab 切换 ===
+    activeTab: 'tokens',
+
+    // === 算力 Tab ===
+    computeLoading: true,
+    computeData: [],
+    computeFilteredList: [],
+    computeUpdateTime: '',
+    computeAvailable: 0,
+    computeSellout: 0,
+    computeRegionOptions: ['全部'],
+    computeRegionIndex: 0,
+    computeCheckingSellout: false,
+    computeGpuOptions: ['全部'],
+    computeGpuIndex: 0
   },
 
   onLoad: function() {
@@ -23,7 +40,6 @@ Page({
     else { self.setData({ activeSource: 'selfhosted' }) }
     self.probeBothSources()
 
-    // 开启转发功能 — 支持分享给好友和群聊
     wx.showShareMenu({
       withShareTicket: true,
       menus: ['shareAppMessage', 'shareTimeline']
@@ -48,11 +64,30 @@ Page({
 
   onPullDownRefresh: function() {
     var self = this
-    self.probeBothSources()
+    if (self.data.activeTab === 'tokens') {
+      self.probeBothSources()
+    } else {
+      self.loadComputeData()
+    }
     setTimeout(function() { wx.stopPullDownRefresh() }, 5000)
   },
 
-  // ... probeBothSources, probeSelfHosted, probeCloud, markSourceDown, timeColor 不变 ...
+  // ============================================================
+  // Tab 切换
+  // ============================================================
+  onSwitchTab: function(e) {
+    var self = this
+    var tab = e.currentTarget.dataset.tab
+    if (tab === self.data.activeTab) return
+    self.setData({ activeTab: tab })
+    if (tab === 'compute' && self.data.computeData.length === 0) {
+      self.loadComputeData()
+    }
+  },
+
+  // ============================================================
+  // Tokens 数据加载 (原有逻辑)
+  // ============================================================
   probeBothSources: function() {
     var self = this
     self.setData({ loading: true })
@@ -150,10 +185,6 @@ Page({
     this.initData(models, pricingData.updateTime)
   },
 
-  // ============================================================
-  // 初始化数据 + 生成厂商标签
-  // ============================================================
-
   initData: function(rawModels, updateTime) {
     var self = this
     var app = getApp()
@@ -161,7 +192,6 @@ Page({
     var models = rawModels.map(function(m) { return expand(m) })
     self.allModels = models
 
-    // 收集所有厂商，按规则排序：天翼云第一，其余字母序
     var provSet = {}
     models.forEach(function(m) { provSet[m.provider] = 1 })
     var provs = Object.keys(provSet)
@@ -178,15 +208,12 @@ Page({
 
     self.setData({
       providerTags: tags,
+      activeProvider: '天翼云',
       lastUpdate: updateTime || '',
       loading: false
     })
     self.applyFilters()
   },
-
-  // ============================================================
-  // 厂商标签切换
-  // ============================================================
 
   onProviderTag: function(e) {
     var name = e.currentTarget.dataset.name
@@ -196,10 +223,6 @@ Page({
     this.setData({ providerTags: tags, activeProvider: name === '全部' ? '' : name, filteredList: [] })
     this.applyFilters()
   },
-
-  // ============================================================
-  // 搜索 / 排序
-  // ============================================================
 
   onSearch: function(e) { this.setData({ keyword: e.detail.value }); this.applyFilters() },
   onSort: function(e) {
@@ -225,5 +248,285 @@ Page({
       return sa ? va - vb : vb - va
     })
     this.setData({ filteredList: list })
+  },
+
+  // ============================================================
+  // 算力数据加载
+  // ============================================================
+  loadComputeData: function() {
+    var self = this
+    var hasCache = false
+
+    // 1. 先尝试从本地缓存加载（即时显示，减少延迟）
+    try {
+      var cached = wx.getStorageSync('computeCache')
+      if (cached && cached.data && cached.data.length > 0) {
+        self.initComputeData({
+          data: cached.data,
+          updateTime: cached.updateTime || '',
+          available: cached.available || 0,
+          sellout: cached.sellout || 0
+        })
+        hasCache = true
+      }
+    } catch(e) {}
+
+    if (!hasCache) {
+      self.setData({ computeLoading: true })
+    }
+
+    // 2. 优先云函数数据源
+    self.tryComputeCloud()
+  },
+
+  tryComputeCloud: function() {
+    var self = this
+    var hasCache = self.data.computeData.length > 0
+    if (!wx.cloud) {
+      // 云函数不可用，尝试自建 API
+      wx.request({
+        url: 'https://api.ltcsky.net/compute/gpu.json',
+        timeout: 8000,
+        success: function(res) {
+          if (res.statusCode === 200 && res.data && res.data.code === 0) {
+            self.initComputeData(res.data)
+            try {
+              wx.setStorageSync('computeCache', {
+                data: res.data.data,
+                updateTime: res.data.updateTime || '',
+                available: res.data.available || 0,
+                sellout: res.data.sellout || 0,
+                cachedAt: Date.now()
+              })
+            } catch(e) {}
+            self.checkComputeSellout(self.data.computeFilteredList)
+          } else {
+            self.setData({ computeLoading: false })
+          }
+        },
+        fail: function() { self.setData({ computeLoading: false }) }
+      })
+      return
+    }
+    wx.cloud.callFunction({ name: 'getCompute' }).then(function(res) {
+      var result = res.result
+      if (result && result.code === 0 && result.data && result.data.length > 0) {
+        var raw = { data: result.data, updateTime: result.updateTime,
+          available: result.available, sellout: result.sellout }
+        self.initComputeData(raw)
+        // 写入缓存
+        try {
+          wx.setStorageSync('computeCache', {
+            data: result.data,
+            updateTime: result.updateTime || '',
+            available: result.available || 0,
+            sellout: result.sellout || 0,
+            cachedAt: Date.now()
+          })
+        } catch(e) {}
+
+        self.checkComputeSellout(self.data.computeFilteredList)
+      } else {
+        self.setData({ computeLoading: false })
+        if (!hasCache) wx.showToast({ title: '暂无数据，下拉刷新重试', icon: 'none' })
+      }
+    }).catch(function(err) {
+      console.error('getCompute failed:', err && err.message)
+      self.setData({ computeLoading: false })
+    })
+  },
+
+  // 按归属节点(parent)过滤算力数据，可售优先
+  filterComputeByRegion: function(data, parent) {
+    var filtered
+    if (parent === "全部") {
+      filtered = data.slice()
+    } else if (parent === "华东江苏") {
+      filtered = data.filter(function(item) {
+        return item.parent === "华东" || item.parent === "江苏"
+      })
+    } else {
+      filtered = data.filter(function(item) { return item.parent === parent })
+    }
+    // 可售优先排列
+    filtered.sort(function(a, b) {
+      if (a.sellout === b.sellout) return 0
+      return a.sellout ? 1 : -1
+    })
+    return filtered
+  },
+
+  initComputeData: function(raw) {
+    var self = this
+    var data = raw.data || []
+
+    // 按归属节点(parent)分组下拉选项
+    var parentSet = {}
+    var hasHuadong = false, hasJiangsu = false
+    data.forEach(function(item) {
+      var p = item.parent
+      if (!p) return
+      if (p === "华东") hasHuadong = true
+      else if (p === "江苏") hasJiangsu = true
+      else parentSet[p] = 1
+    })
+    var otherParents = Object.keys(parentSet).sort()
+    var options = ["全部"]
+    if (hasHuadong || hasJiangsu) options.push("华东江苏")
+    options = options.concat(otherParents)
+
+    // 保留用户已选择的区域（下拉刷新时不重置为默认）
+    var currentOptions = self.data.computeRegionOptions
+    var currentIndex = self.data.computeRegionIndex
+    var regionIndex = 0  // fallback: 全部
+    if (currentOptions.length > 1 && currentIndex > 0 && currentIndex < currentOptions.length) {
+      var savedRegion = currentOptions[currentIndex]
+      // 在新选项中查找同名区域
+      for (var i = 0; i < options.length; i++) {
+        if (options[i] === savedRegion) { regionIndex = i; break }
+      }
+    } else {
+      // 首次加载：默认华东江苏
+      regionIndex = (hasHuadong || hasJiangsu) ? 1 : 0
+    }
+    var selectedParent = options[regionIndex]
+
+    var gpuOptions = self.buildGpuOptions(data)
+
+    var filteredData = self.filterComputeByRegion(data, selectedParent)
+    // 为列表渲染添加唯一 key
+    for (var ki = 0; ki < data.length; ki++) {
+      data[ki]._key = data[ki].spec + '|' + data[ki].region
+    }
+
+    self.setData({
+      computeData: data,
+      computeFilteredList: filteredData,
+      computeLoading: false,
+      computeUpdateTime: util.formatTime(raw.updateTime) || raw.updateTime || '',
+      computeAvailable: filteredData.length,
+      computeSellout: 0,
+      computeRegionOptions: options,
+      computeRegionIndex: regionIndex,
+      computeGpuIndex: 0
+    })
+    // 单独设置 GPU 选项确保 picker 刷新
+    self.setData({ computeGpuOptions: gpuOptions })
+  },
+
+  // 从数据中提取 GPU 型号选项（带缓存保护）
+  buildGpuOptions: function(data) {
+    var gpuSet = {}
+    if (data && data.length > 0) {
+      for (var i = 0; i < data.length; i++) {
+        var m = data[i].gpuModel
+        if (m && typeof m === 'string' && m.length > 0) gpuSet[m] = 1
+      }
+    }
+    var models = Object.keys(gpuSet).sort()
+    if (models.length > 0) return ['全部'].concat(models)
+    var existing = this.data.computeGpuOptions
+    return (existing && existing.length > 1) ? existing : ['全部']
+  },
+
+  // 懒加载售罄状态：只查当前区域
+  checkComputeSellout: function(specs) {
+    var self = this
+    if (!specs || specs.length === 0) return
+    if (!wx.cloud) return
+
+    var toCheck = []
+    for (var i = 0; i < specs.length; i++) {
+      var s = specs[i]
+      if (s.regionID && s.flavorID) {
+        toCheck.push({ regionID: s.regionID, flavorID: s.flavorID, index: i })
+      }
+    }
+    if (toCheck.length === 0) {
+      // No specs with IDs (old cached data, will update on next refresh)
+      return
+    }
+
+    self.setData({ computeCheckingSellout: true })
+
+    wx.cloud.callFunction({
+      name: 'checkSellout',
+      data: { specs: toCheck.map(function(x) { return { regionID: x.regionID, flavorID: x.flavorID } }) }
+    }).then(function(res) {
+      var result = res.result
+      if (result && result.code === 0 && result.results) {
+        var data = self.data.computeFilteredList.slice()
+        var changed = false
+        for (var j = 0; j < result.results.length; j++) {
+          var idx = toCheck[j].index
+          if (idx < data.length) {
+            var r = result.results[j]
+            data[idx]._key = data[idx].spec + '|' + data[idx].region
+            data[idx].sellout = r.sellout
+            data[idx].ecsQuota = r.ecsQuota || 0
+            data[idx].ecsUsed = r.ecsUsed || 0
+            data[idx].ecsAvail = r.ecsAvail || 0
+            changed = true
+          }
+        }
+        if (changed) {
+          // 重新排序：可售优先
+          data.sort(function(a, b) {
+            if (a.sellout === b.sellout) return 0
+            return a.sellout ? 1 : -1
+          })
+          var available = 0, sellout = 0
+          for (var k = 0; k < data.length; k++) {
+            data[k].sellout ? sellout++ : available++
+          }
+          self.setData({
+            computeFilteredList: data,
+            computeAvailable: available,
+            computeSellout: sellout,
+            computeCheckingSellout: false
+          })
+        } else {
+          self.setData({ computeCheckingSellout: false })
+        }
+      } else {
+        self.setData({ computeCheckingSellout: false })
+      }
+    }).catch(function(err) {
+      console.error("checkSellout failed:", err)
+      self.setData({ computeCheckingSellout: false })
+    })
+  },
+
+  // GPU 型号筛选
+  onComputeGpuChange: function(e) {
+    var self = this
+    var gpuIndex = parseInt(e.detail.value)
+    var gpuModel = self.data.computeGpuOptions[gpuIndex]
+    self.setData({ computeGpuIndex: gpuIndex })
+    self.applyComputeFilters()
+  },
+
+  // 合并区域+GPU筛选并触发售罄检查
+  applyComputeFilters: function() {
+    var self = this
+    var region = self.data.computeRegionOptions[self.data.computeRegionIndex]
+    var gpuModel = self.data.computeGpuOptions[self.data.computeGpuIndex]
+    var data = self.filterComputeByRegion(self.data.computeData, region)
+    if (gpuModel !== '全部') {
+      data = data.filter(function(item) { return item.gpuModel === gpuModel })
+    }
+    self.setData({
+      computeFilteredList: data,
+      computeAvailable: data.length,
+      computeSellout: 0
+    })
+    self.checkComputeSellout(data)
+  },
+
+  onComputeRegionChange: function(e) {
+    var self = this
+    var index = parseInt(e.detail.value)
+    self.setData({ computeRegionIndex: index })
+    self.applyComputeFilters()
   }
 })

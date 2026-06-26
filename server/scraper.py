@@ -322,41 +322,44 @@ def scrape_kimi(models):
         ("https://platform.kimi.com/docs/pricing/chat-k25", "Kimi-K2.5"),
         ("https://platform.kimi.com/docs/pricing/chat-k26", "Kimi-K2.6"),
     ]
-    for url, name_pat in pages:
+    for url, model_name in pages:
         try:
             html = fetch(url)
             # SSR payload: rows: [["model", "1M tokens", "¥cp", "¥ip", "¥op", ...]]
-            # 用 re.escape 转义模型名中的特殊字符，然后匹配三个 ¥价格
-            pat = re.escape(name_pat) + r"[\s\S]{0,300}?¥([\d.]+)[\s\S]{0,60}?¥([\d.]+)[\s\S]{0,60}?¥([\d.]+)"
-            m = re.search(pat, html)
-            if m:
-                cp, ip, op = float(m.group(1)), float(m.group(2)), float(m.group(3))
-                for mod in find_models(models, name_pat, provider="Kimi"):
-                    mod["i"], mod["o"] = ip, op
-                    mod["cp"] = cp
-                    mod.pop("stale", None)
-                    updated += 1
-        except Exception:
-            pass
-
-    # K2.7 Code — 同一页面有两个变体，按出现顺序分配
-    try:
-        html = fetch("https://platform.kimi.com/docs/pricing/chat-k27-code")
-        matches = list(re.finditer(
-            r"kimi-k2\.7-code[\s\S]{0,200}?¥([\d.]+)[\s\S]{0,50}?¥([\d.]+)[\s\S]{0,50}?¥([\d.]+)",
-            html
-        ))
-        model_names = ["Kimi-K2.7-Code", "Kimi-K2.7-Code-Highspeed"]
-        for i, match in enumerate(matches):
-            if i >= len(model_names):
-                break
-            cp, ip, op = float(match.group(1)), float(match.group(2)), float(match.group(3))
-            name = model_names[i]
-            for mod in find_models(models, name, provider="Kimi"):
+            m = re.search(r"rows:\s*\[([^\]]+)\]", html)
+            if not m:
+                continue
+            prices = re.findall(r"¥([\d.]+)", m.group(1))
+            if len(prices) < 3:
+                continue
+            cp, ip, op = float(prices[0]), float(prices[1]), float(prices[2])
+            for mod in find_models(models, model_name, provider="Kimi"):
                 mod["i"], mod["o"] = ip, op
                 mod["cp"] = cp
                 mod.pop("stale", None)
                 updated += 1
+        except Exception:
+            pass
+
+    # K2.7 Code — 两个变体在同一页
+    try:
+        html = fetch("https://platform.kimi.com/docs/pricing/chat-k27-code")
+        m = re.search(r"rows:\s*\[([^\]]+)\][^\]]*?\[([^\]]+)\]", html)
+        if m:
+            pairs = [
+                (find_models(models, "Kimi-K2.7-Code", provider="Kimi"), m.group(1)),
+                (find_models(models, "Kimi-K2.7-Code-Highspeed", provider="Kimi"), m.group(2)),
+            ]
+            for mods, row in pairs:
+                ps = re.findall(r"¥([\d.]+)", row)
+                if len(ps) < 3:
+                    continue
+                cp, ip, op = float(ps[0]), float(ps[1]), float(ps[2])
+                for mod in mods:
+                    mod["i"], mod["o"] = ip, op
+                    mod["cp"] = cp
+                    mod.pop("stale", None)
+                    updated += 1
     except Exception:
         pass
 

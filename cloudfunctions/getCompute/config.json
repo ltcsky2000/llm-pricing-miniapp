@@ -5,9 +5,9 @@
   "timeout": 60,
   "triggers": [
     {
-      "name": "dailyUpdate",
+      "name": "dailyCompute",
       "type": "timer",
-      "config": "0 0 2 * * * *"
+      "config": "0 0 3 * * * *"
     }
   ]
 }
