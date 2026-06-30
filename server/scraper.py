@@ -741,11 +741,6 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
         removed_names = [f'{m["n"]}({m["p"]})' for m in removed]
         print(f"[CLEAN] 移除 {len(removed)} 个已下架模型: {', '.join(removed_names)}")
 
-    # 国外厂商无法自动抓取，标记 stale
-    for m in models:
-        if m.get("p") in ("Anthropic", "OpenAI", "Gemini"):
-            m["stale"] = True
-
     errors = []
 
     # 依次执行爬虫
