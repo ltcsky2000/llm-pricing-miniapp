@@ -527,7 +527,6 @@ exports.main = async (event, context) => {
     { name: '智谱', fn: () => scrapeZhipu(models) },
     { name: 'Kimi', fn: () => scrapeKimi(models) },
     { name: 'MiniMax', fn: () => scrapeMiniMax(models) },
-    { name: 'OpenAI', fn: () => scrapeOpenAI(models) },
     { name: 'Gemini', fn: () => scrapeGemini(models) },
     { name: 'Anthropic', fn: () => scrapeAnthropic(models) },
     { name: '中国联通', fn: () => scrapeCuloud(models) }
@@ -542,5 +541,5 @@ exports.main = async (event, context) => {
   const totalTime = ((Date.now() - startTime) / 1000).toFixed(1)
   console.log(`[TIMING] 总耗时 ${totalTime}s | scrapers: ${!errors.some(e=>e.startsWith('DeepSeek'))}/${!errors.some(e=>e.startsWith('阿里百炼'))}/${!errors.some(e=>e.startsWith('天翼云'))}/${!errors.some(e=>e.startsWith('硅基流动'))}/${!errors.some(e=>e.startsWith('智谱'))}`)
 
-  return { code: 0, modelCount: models.length, isSeeded, totalTime: totalTime + 's', scrapers: { deepseek: !errors.some(e=>e.startsWith('DeepSeek')), bailian: !errors.some(e=>e.startsWith('阿里百炼')), ctyun: !errors.some(e=>e.startsWith('天翼云')),  siliconflow: !errors.some(e=>e.startsWith('硅基流动')), zhipu: !errors.some(e=>e.startsWith('智谱')), kimi: !errors.some(e=>e.startsWith('Kimi')), minimax: !errors.some(e=>e.startsWith('MiniMax')), openai: !errors.some(e=>e.startsWith('OpenAI')), gemini: !errors.some(e=>e.startsWith('Gemini')), anthropic: !errors.some(e=>e.startsWith('Anthropic')), culoud: !errors.some(e=>e.startsWith('中国联通')) }, errors: errors.length ? errors : undefined }
+  return { code: 0, modelCount: models.length, isSeeded, totalTime: totalTime + 's', scrapers: { deepseek: !errors.some(e=>e.startsWith('DeepSeek')), bailian: !errors.some(e=>e.startsWith('阿里百炼')), ctyun: !errors.some(e=>e.startsWith('天翼云')),  siliconflow: !errors.some(e=>e.startsWith('硅基流动')), zhipu: !errors.some(e=>e.startsWith('智谱')), kimi: !errors.some(e=>e.startsWith('Kimi')), minimax: !errors.some(e=>e.startsWith('MiniMax')), gemini: !errors.some(e=>e.startsWith('Gemini')), anthropic: !errors.some(e=>e.startsWith('Anthropic')), culoud: !errors.some(e=>e.startsWith('中国联通')) }, errors: errors.length ? errors : undefined }
 }

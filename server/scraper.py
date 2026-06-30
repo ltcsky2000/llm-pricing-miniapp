@@ -748,7 +748,7 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
                       ("天翼云", scrape_ctyun), ("硅基流动", scrape_siliconflow),
                       ("智谱", scrape_zhipu),
                       ("Kimi", scrape_kimi), ("MiniMax", scrape_minimax),
-                      ("OpenAI", scrape_openai), ("Gemini", scrape_gemini),
+                      ("Gemini", scrape_gemini),
                       ("Anthropic", scrape_anthropic),
                       ("中国联通", scrape_culoud)]:
         try:
@@ -781,7 +781,6 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
         "zhipu": not any(e.startswith("智谱") for e in errors),
         "kimi": not any(e.startswith("Kimi") for e in errors),
         "minimax": not any(e.startswith("MiniMax") for e in errors),
-        "openai": not any(e.startswith("OpenAI") for e in errors),
         "gemini": not any(e.startswith("Gemini") for e in errors),
         "anthropic": not any(e.startswith("Anthropic") for e in errors),
         "culoud": not any(e.startswith("中国联通") for e in errors),
