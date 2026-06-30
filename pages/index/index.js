@@ -133,9 +133,9 @@ Page({
 
     function finish() {
       done++
-      if (shown) { self.setData({ loading: false }); return }
-      if (tryShow()) { shown = true; self.setData({ loading: false }) }
-      if (done >= 2 && !shown) { self.setData({ loading: false }); self.fallbackToLocal() }
+      if (tryShow()) { shown = true }
+      self.setData({ loading: false })
+      if (done >= 2 && !shown) { self.fallbackToLocal() }
     }
 
     self.probeSelfHosted(function(result) { selfhostedData = result; finish() })
