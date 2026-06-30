@@ -75,6 +75,26 @@ SEED_DATA = [
   {"n":"Opus 4.8","p":"Anthropic","pc":"#D4A574","i":5.0,"o":25.0,"cp":6.25,"cu":"$","cw":"200K","t":"旗舰模型","cap":"编程/企业","d":"复杂agentic编程","id":91,"cu":"$"},
   {"n":"Sonnet 4.6","p":"Anthropic","pc":"#D4A574","i":3.0,"o":15.0,"cp":3.75,"cu":"$","cw":"200K","t":"高性能","d":"智能与速度平衡","id":92,"cu":"$"},
   {"n":"Haiku 4.5","p":"Anthropic","pc":"#D4A574","i":1.0,"o":5.0,"cp":1.25,"cu":"$","cw":"200K","t":"轻量模型","d":"最快最经济","id":93,"cu":"$"},
+  {"n":"Qwen2.5-0.5B-Instruct","p":"中国联通","pc":"#E60012","i":0,"o":0.6,"in_":"输入免费","cw":"32K","t":"稠密小模型","d":"联通AI-千问0.5B","id":94,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"Qwen2.5-1.5B-Instruct","p":"中国联通","pc":"#E60012","i":0,"o":1.6,"in_":"输入免费","cw":"32K","t":"稠密小模型","d":"联通AI-千问1.5B","id":95,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"Qwen2.5-3B-Instruct","p":"中国联通","pc":"#E60012","i":0.3,"o":0.9,"cw":"32K","t":"稠密模型","d":"联通AI-千问3B","id":96,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"Qwen2.5-7B-Instruct","p":"中国联通","pc":"#E60012","i":0.5,"o":1.0,"cw":"128K","t":"稠密模型","d":"联通AI-千问7B","id":97,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"Qwen2.5-14B-Instruct","p":"中国联通","pc":"#E60012","i":1.0,"o":3.0,"cw":"128K","t":"稠密模型","d":"联通AI-千问14B","id":98,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"Qwen2.5-32B-Instruct","p":"中国联通","pc":"#E60012","i":2.0,"o":6.0,"cw":"128K","t":"稠密模型","d":"联通AI-千问32B","id":99,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"Qwen2.5-72B-Instruct","p":"中国联通","pc":"#E60012","i":4.0,"o":4.0,"cw":"128K","t":"稠密模型","d":"联通AI-千问72B","id":100,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"DeepSeek-R1","p":"中国联通","pc":"#E60012","i":4.0,"o":16.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-DeepSeek推理","isHot":true,"id":101,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"DeepSeek-V3","p":"中国联通","pc":"#E60012","i":2.0,"o":8.0,"cw":"128K","t":"旗舰模型","d":"联通AI-DeepSeek V3","id":102,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"DeepSeek-V3.1","p":"中国联通","pc":"#E60012","i":4.0,"o":12.0,"cw":"128K","t":"旗舰模型","d":"联通AI-DeepSeek V3.1","isHot":true,"id":103,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"DeepSeek-R1-Distill-Qwen-7B","p":"中国联通","pc":"#E60012","i":0.5,"o":1.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏7B","id":104,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"DeepSeek-R1-Distill-Qwen-32B","p":"中国联通","pc":"#E60012","i":1.3,"o":1.3,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏32B","id":105,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"DeepSeek-R1-Distill-Llama-8B","p":"中国联通","pc":"#E60012","i":0.6,"o":1.2,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏Llama8B","id":106,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"DeepSeek-R1-Distill-Llama-70B","p":"中国联通","pc":"#E60012","i":0,"o":0,"in_":"限时免费体验","cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏70B(免费)","isHot":true,"id":107,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"Llama3-8B-Instruct","p":"中国联通","pc":"#E60012","i":4.0,"o":4.0,"cw":"128K","t":"稠密模型","d":"联通AI-Llama3 8B","id":108,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"Llama3-70B-Instruct","p":"中国联通","pc":"#E60012","i":35.0,"o":35.0,"cw":"128K","t":"旗舰模型","d":"联通AI-Llama3 70B","id":109,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"QwQ-32B","p":"中国联通","pc":"#E60012","i":2.0,"o":6.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-QwQ推理","id":110,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"bge-base-en-v1.5","p":"中国联通","pc":"#E60012","i":0.5,"o":0,"in_":"Embedding","cw":"512","t":"Embedding","d":"联通AI-BGE嵌入","id":111,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"📊 嵌入"},
+  {"n":"bge-reranker-v2-m3","p":"中国联通","pc":"#E60012","i":0.7,"o":0,"in_":"Reranker","cw":"512","t":"Reranker","d":"联通AI-BGE重排序","id":112,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"📊 嵌入"},
+
 ]
 
 # ============================================================
@@ -589,6 +609,83 @@ def scrape_anthropic(models):
     if not updated:
         for m in anthropic_models:
             m["stale"] = True# ============================================================
+
+def scrape_culoud(models):
+    """中国联通 — 从按量计费页提取定价（元/千tokens，需×1000转元/百万）"""
+    updated = 0
+    try:
+        html = fetch("https://support.cucloud.cn/document/127/591/2357.html?id=2357&arcid=6518&lang=zh", timeout=15)
+        if not html:
+            return
+        clean = re.sub(r"<[^>]+>", " ", html)
+        clean = re.sub(r"\s+", " ", clean)
+        if "按量计费" not in clean:
+            return
+        
+        # Find the 按量计费 pricing section
+        idx = clean.find("按量计费")
+        if idx < 0:
+            return
+        section = clean[idx:idx+5000]
+        
+        # Parse model pricing: "ModelName-Input 千tokens Price" or "ModelName-Output 千tokens Price"
+        # Prices are 元/千tokens, need ×1000 to get 元/百万tokens
+        patterns = [
+            (r"DeepSeek-R1-Input[^0-9]*([\d.]+)", "DeepSeek-R1", "i"),
+            (r"DeepSeek-R1-Output[^0-9]*([\d.]+)", "DeepSeek-R1", "o"),
+            (r"DeepSeek-V3\.1-Input[^0-9]*([\d.]+)", "DeepSeek-V3.1", "i"),
+            (r"DeepSeek-V3\.1-Output[^0-9]*([\d.]+)", "DeepSeek-V3.1", "o"),
+            (r"DeepSeek-V3-Input[^0-9]*([\d.]+)", "DeepSeek-V3", "i"),
+            (r"DeepSeek-V3-Output[^0-9]*([\d.]+)", "DeepSeek-V3", "o"),
+            (r"DeepSeek-R1-Distill-Qwen-7B-Input[^0-9]*([\d.]+)", "DeepSeek-R1-Distill-Qwen-7B", "i"),
+            (r"DeepSeek-R1-Distill-Qwen-7B-Output[^0-9]*([\d.]+)", "DeepSeek-R1-Distill-Qwen-7B", "o"),
+            (r"DeepSeek-R1-Distill-Qwen-32B-Input[^0-9]*([\d.]+)", "DeepSeek-R1-Distill-Qwen-32B", "i"),
+            (r"DeepSeek-R1-Distill-Qwen-32B-Output[^0-9]*([\d.]+)", "DeepSeek-R1-Distill-Qwen-32B", "o"),
+            (r"DeepSeek-R1-Distill-Llama-8B-Input[^0-9]*([\d.]+)", "DeepSeek-R1-Distill-Llama-8B", "i"),
+            (r"DeepSeek-R1-Distill-Llama-8B-Output[^0-9]*([\d.]+)", "DeepSeek-R1-Distill-Llama-8B", "o"),
+            # Llama-70B distill is free
+            (r"Qwen2\.5-0\.5B-Instruct-Output[^0-9]*([\d.]+)", "Qwen2.5-0.5B-Instruct", "o"),
+            (r"Qwen2\.5-1\.5B-Instruct-Output[^0-9]*([\d.]+)", "Qwen2.5-1.5B-Instruct", "o"),
+            (r"Qwen2\.5-3B-Input[^0-9]*([\d.]+)", "Qwen2.5-3B-Instruct", "i"),
+            (r"Qwen2\.5-3B-Output[^0-9]*([\d.]+)", "Qwen2.5-3B-Instruct", "o"),
+            (r"Qwen2\.5-7B-Input[^0-9]*([\d.]+)", "Qwen2.5-7B-Instruct", "i"),
+            (r"Qwen2\.5-7B-Output[^0-9]*([\d.]+)", "Qwen2.5-7B-Instruct", "o"),
+            (r"Qwen2\.5-14B-Input[^0-9]*([\d.]+)", "Qwen2.5-14B-Instruct", "i"),
+            (r"Qwen2\.5-14B-Output[^0-9]*([\d.]+)", "Qwen2.5-14B-Instruct", "o"),
+            (r"Qwen2\.5-32B-Input[^0-9]*([\d.]+)", "Qwen2.5-32B-Instruct", "i"),
+            (r"Qwen2\.5-32B-Output[^0-9]*([\d.]+)", "Qwen2.5-32B-Instruct", "o"),
+            (r"Qwen2\.5-72B-Input[^0-9]*([\d.]+)", "Qwen2.5-72B-Instruct", "i"),
+            (r"Qwen2\.5-72B-Output[^0-9]*([\d.]+)", "Qwen2.5-72B-Instruct", "o"),
+            (r"Llama3-8B-Instruct[^0-9]*([\d.]+)", "Llama3-8B-Instruct", "io"),
+            (r"Llama3-70B-Instruct[^0-9]*([\d.]+)", "Llama3-70B-Instruct", "io"),
+            (r"QwQ_32B_Input[^0-9]*([\d.]+)", "QwQ-32B", "i"),
+            (r"QwQ_32B_Output[^0-9]*([\d.]+)", "QwQ-32B", "o"),
+            (r"bge_base_en_v1_5[^0-9]*([\d.]+)", "bge-base-en-v1.5", "i"),
+            (r"bge_reranker_v2_m3[^0-9]*([\d.]+)", "bge-reranker-v2-m3", "i"),
+        ]
+        for pat, model_name, field in patterns:
+            m = re.search(pat, section)
+            if m:
+                price_per_1k = float(m.group(1))
+                price_per_1m = round(price_per_1k * 1000, 2)  # 元/千tokens → 元/百万tokens
+                for mod in models:
+                    if mod.get("n") == model_name and mod.get("p") == "中国联通":
+                        if field == "io":
+                            mod["i"], mod["o"] = price_per_1m, price_per_1m
+                        else:
+                            mod[field] = price_per_1m
+                        mod.pop("stale", None)
+                        updated += 1
+    except Exception as e:
+        print(f"[中国联通] scrape error: {e}")
+    
+    if not updated:
+        for m in find_models(models, "", provider="中国联通"):
+            m["stale"] = True
+    else:
+        print(f"[中国联通] 更新 {updated} 个模型价格")
+
+
 # 主函数
 # ============================================================
 
@@ -631,7 +728,8 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
                       ("智谱", scrape_zhipu),
                       ("Kimi", scrape_kimi), ("MiniMax", scrape_minimax),
                       ("OpenAI", scrape_openai), ("Gemini", scrape_gemini),
-                      ("Anthropic", scrape_anthropic)]:
+                      ("Anthropic", scrape_anthropic),
+                      ("中国联通", scrape_culoud)]:
         try:
             fn(models)
         except Exception as e:
@@ -665,6 +763,7 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
         "openai": not any(e.startswith("OpenAI") for e in errors),
         "gemini": not any(e.startswith("Gemini") for e in errors),
         "anthropic": not any(e.startswith("Anthropic") for e in errors),
+        "culoud": not any(e.startswith("中国联通") for e in errors),
     }
     print(f"[DONE] 总耗时 {elapsed:.1f}s | scrapers: {scraper_status}")
 
