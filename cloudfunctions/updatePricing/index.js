@@ -514,8 +514,8 @@ exports.main = async (event, context) => {
     console.log(`[CLEAN] 移除 ${removed.length} 个已下架模型: ${removedNames}`)
   }
 
-  // 手工维护的厂商：清除旧 stale 标记
-  models.filter(m => m.p === 'OpenAI').forEach(m => delete m.stale)
+  // 国外厂商无法自动抓取，标记 stale
+  findModel(models, '').filter(m => m.p === 'Anthropic' || m.p === 'OpenAI' || m.p === 'Gemini').forEach(m => m.stale = true)
 
   const errors = []
   const startTime = Date.now()
@@ -530,8 +530,6 @@ exports.main = async (event, context) => {
     { name: '智谱', fn: () => scrapeZhipu(models) },
     { name: 'Kimi', fn: () => scrapeKimi(models) },
     { name: 'MiniMax', fn: () => scrapeMiniMax(models) },
-    { name: 'Gemini', fn: () => scrapeGemini(models) },
-    { name: 'Anthropic', fn: () => scrapeAnthropic(models) },
     { name: '中国联通', fn: () => scrapeCuloud(models) }
   ]
   await Promise.all(scrapers.map(s =>

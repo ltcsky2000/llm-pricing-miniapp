@@ -741,10 +741,10 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
         removed_names = [f'{m["n"]}({m["p"]})' for m in removed]
         print(f"[CLEAN] 移除 {len(removed)} 个已下架模型: {', '.join(removed_names)}")
 
-    # 手工维护的厂商：清除旧 stale 标记
+    # 国外厂商无法自动抓取，标记 stale
     for m in models:
-        if m.get("p") == "OpenAI":
-            m.pop("stale", None)
+        if m.get("p") in ("Anthropic", "OpenAI", "Gemini"):
+            m["stale"] = True
 
     errors = []
 
@@ -753,8 +753,6 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
                       ("天翼云", scrape_ctyun), ("硅基流动", scrape_siliconflow),
                       ("智谱", scrape_zhipu),
                       ("Kimi", scrape_kimi), ("MiniMax", scrape_minimax),
-                      ("Gemini", scrape_gemini),
-                      ("Anthropic", scrape_anthropic),
                       ("中国联通", scrape_culoud)]:
         try:
             fn(models)
@@ -786,8 +784,6 @@ def main(output_path="/opt/llm-pricing/data/latest.json", sync_path=None):
         "zhipu": not any(e.startswith("智谱") for e in errors),
         "kimi": not any(e.startswith("Kimi") for e in errors),
         "minimax": not any(e.startswith("MiniMax") for e in errors),
-        "gemini": not any(e.startswith("Gemini") for e in errors),
-        "anthropic": not any(e.startswith("Anthropic") for e in errors),
         "culoud": not any(e.startswith("中国联通") for e in errors),
     }
     print(f"[DONE] 总耗时 {elapsed:.1f}s | scrapers: {scraper_status}")
