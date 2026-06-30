@@ -99,6 +99,8 @@ SEED_DATA = [
   {"n":"Token Plan","p":"MiniMax","pc":"#FF4500","tp":"subscription","pts":"[{\"n\":\"Plus\",\"pr\":49,\"pe\":\"月\",\"d\":\"轻量个人开发\"},{\"n\":\"Max\",\"pr\":119,\"pe\":\"月\",\"d\":\"高频编程Agent\",\"f\":true},{\"n\":\"Ultra\",\"pr\":469,\"pe\":\"月\",\"d\":\"重度工作流\"}]","d":"文本/图像/语音/音乐共享额度，超出自补","id":200,"s":["https://platform.minimaxi.com/docs/guides/pricing-token-plan"]},
   {"n":"编程Token Plan","p":"天翼云","pc":"#0078D4","tp":"subscription","pp":9.9,"pd":"月起","ptg":"[\"编程专用\",\"包周期\",\"专属Key\",\"接入AI工具\"]","d":"天翼云编程订阅套餐，包周期计费","id":201,"s":["https://www.ctyun.cn/document/11061839/11062267"]},
   {"n":"Coding Plan","p":"中国联通","pc":"#E60012","tp":"subscription","pp":0,"pd":"月起","ptg":"[\"Lite版\",\"Pro专业进阶\",\"5倍额度\",\"高并发\"]","d":"联通AI编程订阅，月请求次数配额","id":202,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+
+  {"n":"Go 订阅","p":"OpenCode","pc":"#6366F1","tp":"subscription","pp":10,"pd":"月","ptg":"[\"$5首月\",\"13个编程模型\",\"$12/5h额度\",\"$60/月额度\",\"全球多区域\"]","d":"开源编程模型订阅, 首月$5/月后$10","id":203,"s":["https://opencode.ai/docs/zh-cn/go/"],"cu":"$"},
 ]
 
 # ============================================================
