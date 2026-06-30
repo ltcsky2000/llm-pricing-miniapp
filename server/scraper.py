@@ -44,7 +44,7 @@ SEED_DATA = [
   {"n":"DeepSeek-V4-Flash","p":"硅基流动","pc":"#7C3AED","i":1,"o":2,"cw":"1M","t":"轻量模型","d":"硅基流动托管","id":32},
   {"n":"DeepSeek-V4-Pro","p":"硅基流动","pc":"#7C3AED","i":3,"o":10,"cw":"1M","t":"旗舰模型","d":"硅基流动托管","id":33},
   {"n":"DeepSeek-R1","p":"硅基流动","pc":"#7C3AED","i":2,"o":8,"cw":"1M","t":"推理模型","cap":"思考/推理","d":"硅基流动托管","id":34,"tg":"🧠 推理"},
-  {"n":"Qwen3.7-Max","p":"硅基流动","pc":"#7C3AED","i":2,"o":8,"cw":"128K","t":"旗舰模型","d":"硅基流动托管","id":35},
+  
   {"n":"Qwen3-235B-A22B","p":"硅基流动","pc":"#7C3AED","i":3,"o":12,"cw":"128K","t":"MoE旗舰","id":36},
   {"n":"Kimi-K2.5","p":"硅基流动","pc":"#7C3AED","i":1,"o":4,"cw":"128K","t":"旗舰模型","d":"Kimi最新","isHot":True,"id":37},
   {"n":"Pro/Lite/V1/Free","p":"硅基流动","pc":"#7C3AED","i":0,"o":0,"in_":"免费","cw":"32K","t":"免费模型","d":"硅基免费模型","id":38},
@@ -82,25 +82,25 @@ SEED_DATA = [
   {"n":"Qwen2.5-14B-Instruct","p":"中国联通","pc":"#E60012","i":1.0,"o":3.0,"cw":"128K","t":"稠密模型","d":"联通AI-千问14B","id":98,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
   {"n":"Qwen2.5-32B-Instruct","p":"中国联通","pc":"#E60012","i":2.0,"o":6.0,"cw":"128K","t":"稠密模型","d":"联通AI-千问32B","id":99,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
   {"n":"Qwen2.5-72B-Instruct","p":"中国联通","pc":"#E60012","i":4.0,"o":4.0,"cw":"128K","t":"稠密模型","d":"联通AI-千问72B","id":100,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
-  {"n":"DeepSeek-R1","p":"中国联通","pc":"#E60012","i":4.0,"o":16.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-DeepSeek推理","isHot":True,"id":101,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"DeepSeek-R1","p":"中国联通","pc":"#E60012","i":4.0,"o":16.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-DeepSeek推理","isHot":true,"id":101,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
   {"n":"DeepSeek-V3","p":"中国联通","pc":"#E60012","i":2.0,"o":8.0,"cw":"128K","t":"旗舰模型","d":"联通AI-DeepSeek V3","id":102,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
-  {"n":"DeepSeek-V3.1","p":"中国联通","pc":"#E60012","i":4.0,"o":12.0,"cw":"128K","t":"旗舰模型","d":"联通AI-DeepSeek V3.1","isHot":True,"id":103,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
+  {"n":"DeepSeek-V3.1","p":"中国联通","pc":"#E60012","i":4.0,"o":12.0,"cw":"128K","t":"旗舰模型","d":"联通AI-DeepSeek V3.1","isHot":true,"id":103,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
   {"n":"DeepSeek-R1-Distill-Qwen-7B","p":"中国联通","pc":"#E60012","i":0.5,"o":1.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏7B","id":104,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
   {"n":"DeepSeek-R1-Distill-Qwen-32B","p":"中国联通","pc":"#E60012","i":1.3,"o":1.3,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏32B","id":105,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
   {"n":"DeepSeek-R1-Distill-Llama-8B","p":"中国联通","pc":"#E60012","i":0.6,"o":1.2,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏Llama8B","id":106,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
-  {"n":"DeepSeek-R1-Distill-Llama-70B","p":"中国联通","pc":"#E60012","i":0,"o":0,"in_":"限时免费体验","cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏70B(免费)","isHot":True,"id":107,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
+  {"n":"DeepSeek-R1-Distill-Llama-70B","p":"中国联通","pc":"#E60012","i":0,"o":0,"in_":"限时免费体验","cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-R1蒸馏70B(免费)","isHot":true,"id":107,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
   {"n":"Llama3-8B-Instruct","p":"中国联通","pc":"#E60012","i":4.0,"o":4.0,"cw":"128K","t":"稠密模型","d":"联通AI-Llama3 8B","id":108,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
   {"n":"Llama3-70B-Instruct","p":"中国联通","pc":"#E60012","i":35.0,"o":35.0,"cw":"128K","t":"旗舰模型","d":"联通AI-Llama3 70B","id":109,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
   {"n":"QwQ-32B","p":"中国联通","pc":"#E60012","i":2.0,"o":6.0,"cw":"128K","t":"推理模型","cap":"思考/推理","d":"联通AI-QwQ推理","id":110,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"🧠 推理"},
   {"n":"bge-base-en-v1.5","p":"中国联通","pc":"#E60012","i":0.5,"o":0,"in_":"Embedding","cw":"512","t":"Embedding","d":"联通AI-BGE嵌入","id":111,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"📊 嵌入"},
   {"n":"bge-reranker-v2-m3","p":"中国联通","pc":"#E60012","i":0.7,"o":0,"in_":"Reranker","cw":"512","t":"Reranker","d":"联通AI-BGE重排序","id":112,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"📊 嵌入"},
 
+  {"n":"Token Plan","p":"MiniMax","pc":"#FF4500","planType":"subscription","tiers":[{"name":"Plus","price":49,"period":"月","desc":"轻量个人开发与日常试用","quota":""},{"name":"Max","price":119,"period":"月","desc":"高频编程 Agent 与多模态调用","quota":""},{"name":"Ultra","price":469,"period":"月","desc":"重度 Agent 工作流与更长时间使用","quota":""}],"d":"文本/图像/语音/音乐共享额度，5h+周双窗口","t":"订阅套餐","id":200,"s":["https://platform.minimaxi.com/docs/guides/pricing-token-plan"]},
+  {"n":"编程Token Plan","p":"天翼云","pc":"#0078D4","planType":"subscription","tiers":[{"name":"轻享包","price":9.9,"period":"月","desc":"编程入门套餐","quota":""}],"d":"包周期计费，专属API Key，支持OpenClaw等AI编程工具","t":"订阅套餐","id":201,"s":["https://www.ctyun.cn/document/11061839/11092369"]},
+  {"n":"Coding Plan","p":"中国联通","pc":"#E60012","planType":"subscription","tiers":[{"name":"Lite","price":40,"period":"月","desc":"基础开发任务","quota":"18000次/月"},{"name":"Pro","price":200,"period":"月","desc":"全栈工程师/重度使用","quota":"90000次/月"}],"d":"编程专用订阅，按请求次数计费，5h/周/月三级限额","t":"订阅套餐","id":202,"s":["https://support.cucloud.cn/document/127/591/2357.html?folderid=3026"]},
+  {"n":"Go 订阅","p":"OpenCode","pc":"#6366F1","planType":"subscription","tiers":[{"name":"首月","price":5,"period":"月","desc":"$5首月","quota":"13个编程模型"},{"name":"标准","price":10,"period":"月","desc":"全球多区域","quota":"$12/5h $60/月"}],"d":"开源编程模型订阅","t":"订阅套餐","id":203,"cu":"$","s":["https://opencode.ai/docs/zh-cn/go/"]},
+  {"n":"Token Plan","p":"中国联通","pc":"#E60012","planType":"subscription","tiers":[{"name":"Lite","price":15,"period":"月","desc":"尝鲜用户","quota":"600万tokens"},{"name":"Pro","price":30,"period":"月","desc":"效率达人","quota":"1200万tokens"},{"name":"Max","price":45,"period":"月","desc":"核心开发者","quota":"1800万tokens"}],"d":"个人版大模型订阅套餐，按tokens额度计费","t":"订阅套餐","id":204,"s":["https://support.cucloud.cn/document/127/591/2357.html?folderid=3236"]},
 
-  {"n":"Token Plan","p":"MiniMax","pc":"#FF4500","tp":"subscription","pts":"[{\"n\":\"Plus\",\"pr\":49,\"pe\":\"月\",\"d\":\"轻量个人开发\"},{\"n\":\"Max\",\"pr\":119,\"pe\":\"月\",\"d\":\"高频编程Agent\",\"f\":true},{\"n\":\"Ultra\",\"pr\":469,\"pe\":\"月\",\"d\":\"重度工作流\"}]","d":"文本/图像/语音/音乐共享额度，超出自补","id":200,"s":["https://platform.minimaxi.com/docs/guides/pricing-token-plan"]},
-  {"n":"编程Token Plan","p":"天翼云","pc":"#0078D4","tp":"subscription","pp":9.9,"pd":"月起","ptg":"[\"编程专用\",\"包周期\",\"专属Key\",\"接入AI工具\"]","d":"天翼云编程订阅套餐，包周期计费","id":201,"s":["https://www.ctyun.cn/document/11061839/11062267"]},
-  {"n":"Coding Plan","p":"中国联通","pc":"#E60012","tp":"subscription","pp":0,"pd":"月起","ptg":"[\"Lite版\",\"Pro专业进阶\",\"5倍额度\",\"高并发\"]","d":"联通AI编程订阅，月请求次数配额","id":202,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
-
-  {"n":"Go 订阅","p":"OpenCode","pc":"#6366F1","tp":"subscription","pp":10,"pd":"月","ptg":"[\"$5首月\",\"13个编程模型\",\"$12/5h额度\",\"$60/月额度\",\"全球多区域\"]","d":"开源编程模型订阅, 首月$5/月后$10","id":203,"s":["https://opencode.ai/docs/zh-cn/go/"],"cu":"$"},
 ]
 
 # ============================================================
