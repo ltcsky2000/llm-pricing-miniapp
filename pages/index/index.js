@@ -90,14 +90,33 @@ Page({
   // ============================================================
   probeBothSources: function() {
     var self = this
-    self.setData({ loading: true })
+    var shown = false
+    var cacheHit = false
+
+    // 1. 先尝试本地缓存（即时显示）
+    try {
+      var cached = wx.getStorageSync('tokensCache')
+      if (cached && cached.data && cached.data.length > 0) {
+        self.initData(cached.data, cached.updateTime)
+        // 更新数据源状态
+        self.setData({
+          'selfhosted.updateTime': cached.updateTime || '',
+          'selfhosted.connected': true,
+          'selfhosted.color': self.timeColor(cached.updateTime)
+        })
+        shown = true
+        cacheHit = true
+      }
+    } catch(e) {}
+
+    if (!cacheHit) self.setData({ loading: true })
+
+    // 2. 网络请求：先到先显示
     var done = 0
     var selfhostedData = null
     var cloudData = null
-    function finish() {
-      done++
-      if (done < 2) return
-      self.setData({ loading: false })
+
+    function tryShow() {
       var active = self.data.activeSource
       var showData = null
       var showTime = ''
@@ -105,9 +124,20 @@ Page({
       else if (active === 'cloud' && cloudData) { showData = cloudData.data; showTime = cloudData.updateTime }
       else if (selfhostedData) { showData = selfhostedData.data; showTime = selfhostedData.updateTime }
       else if (cloudData) { showData = cloudData.data; showTime = cloudData.updateTime }
-      else { self.fallbackToLocal(); return }
+      else return false
       self.initData(showData, showTime)
+      // 写入缓存
+      try { wx.setStorageSync('tokensCache', { data: showData, updateTime: showTime, cachedAt: Date.now() }) } catch(e) {}
+      return true
     }
+
+    function finish() {
+      done++
+      if (shown) { self.setData({ loading: false }); return }
+      if (tryShow()) { shown = true; self.setData({ loading: false }) }
+      if (done >= 2 && !shown) { self.setData({ loading: false }); self.fallbackToLocal() }
+    }
+
     self.probeSelfHosted(function(result) { selfhostedData = result; finish() })
     self.probeCloud(function(result) { cloudData = result; finish() })
   },
@@ -116,7 +146,7 @@ Page({
     var self = this
     var app = getApp()
     wx.request({
-      url: app.globalData.SELF_HOSTED_API, timeout: 8000,
+      url: app.globalData.SELF_HOSTED_API, timeout: 5000,
       success: function(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.length > 0) {
           var t = res.data.updateTime || ''
@@ -202,13 +232,14 @@ Page({
     })
 
     var tags = [{ name: '全部', active: false }]
+    var currentActive = self.data.activeProvider || '天翼云'
     provs.forEach(function(p) {
-      tags.push({ name: p, active: p === '天翼云' })
+      tags.push({ name: p, active: p === currentActive })
     })
 
     self.setData({
       providerTags: tags,
-      activeProvider: '天翼云',
+      activeProvider: currentActive,
       lastUpdate: updateTime || '',
       loading: false
     })
