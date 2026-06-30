@@ -514,6 +514,9 @@ exports.main = async (event, context) => {
     console.log(`[CLEAN] 移除 ${removed.length} 个已下架模型: ${removedNames}`)
   }
 
+  // 手工维护的厂商：清除旧 stale 标记
+  models.filter(m => m.p === 'OpenAI').forEach(m => delete m.stale)
+
   const errors = []
   const startTime = Date.now()
   console.log(`[TIMING] 开始爬取，种子 ${models.length} 个模型`)
