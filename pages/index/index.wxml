@@ -187,12 +187,12 @@
   <view class="bottom-tabs">
     <view class="bottom-tab-item {{activeTab === 'tokens' ? 'active' : ''}}" bindtap="onSwitchTab" data-tab="tokens">
       <text class="bottom-tab-icon">🔑</text>
-      <text class="bottom-tab-label">Tokens</text>
+      <text class="bottom-tab-label">全网Tokens</text>
       <view class="bottom-tab-indicator" wx:if="{{activeTab === 'tokens'}}"></view>
     </view>
     <view class="bottom-tab-item {{activeTab === 'compute' ? 'active' : ''}}" bindtap="onSwitchTab" data-tab="compute">
       <text class="bottom-tab-icon">⚡</text>
-      <text class="bottom-tab-label">算力</text>
+      <text class="bottom-tab-label">天翼云算力</text>
       <view class="bottom-tab-indicator" wx:if="{{activeTab === 'compute'}}"></view>
     </view>
   </view>
