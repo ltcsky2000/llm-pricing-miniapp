@@ -89,37 +89,69 @@
       </view>
     </block>
 
-    <!-- Tokens 列表 -->
+    <!-- Tokens 列表：按量 + 订阅混合 -->
     <view class="price-list" wx:if="{{activeTab === 'tokens' && !loading}}">
-      <view class="price-card" wx:for="{{filteredList}}" wx:key="id" bindtap="onTapModel" data-id="{{item.id}}">
-        <view class="card-header">
-          <view class="provider-tag" style="background:{{item.providerColor}}">{{item.provider}}</view>
-          <view class="model-badges">
-            <text class="badge badge-new" wx:if="{{item.isNew}}">NEW</text>
-            <text class="badge badge-hot" wx:if="{{item.isHot}}">HOT</text>
+      <block wx:for="{{filteredList}}" wx:key="id">
+        <!-- 按量计费卡片 -->
+        <view class="price-card" wx:if="{{!item.planType}}" bindtap="onTapModel" data-id="{{item.id}}">
+          <view class="card-header">
+            <view class="provider-tag" style="background:{{item.providerColor}}">{{item.provider}}</view>
+            <view class="model-badges">
+              <text class="badge badge-new" wx:if="{{item.isNew}}">NEW</text>
+              <text class="badge badge-hot" wx:if="{{item.isHot}}">HOT</text>
+            </view>
+          </view>
+          <view class="model-name">{{item.name}}<text class="stale-icon" wx:if="{{item.stale}}"> ⚠️</text></view>
+          <view class="model-tag-row" wx:if="{{item.tag}}"><text class="model-tag">{{item.tag}}</text></view>
+          <view class="model-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
+          <view class="price-row">
+            <view class="price-item">
+              <text class="price-label">输入</text>
+              <text class="price-value">{{item.currency || "¥"}}{{item.inputPrice}}</text>
+              <text class="price-note" wx:if="{{item.inputNote}}">{{item.inputNote}}</text>
+            </view>
+            <view class="price-divider"></view>
+            <view class="price-item">
+              <text class="price-label">输出</text>
+              <text class="price-value">{{item.currency || "¥"}}{{item.outputPrice}}</text>
+              <text class="price-note" wx:if="{{item.outputNote}}">{{item.outputNote}}</text>
+            </view>
+          </view>
+          <view class="cache-row" wx:if="{{item.cachePrice}}">
+            <text class="cache-label">缓存命中:</text><text class="cache-value">{{item.currency || "¥"}}{{item.cachePrice}}</text>
+          </view>
+          <view class="context-info" wx:if="{{item.contextWindow}}">上下文: {{item.contextWindow}}</view>
+        </view>
+        <!-- 订阅套餐卡片（多档位） -->
+        <view class="plan-card" wx:elif="{{item.planType && item.planTiers && item.planTiers.length > 0}}" bindtap="onTapModel" data-id="{{item.id}}">
+          <view class="card-header">
+            <view class="provider-tag" style="background:{{item.providerColor}}">{{item.provider}}</view>
+            <view class="plan-badge">📦 订阅</view>
+          </view>
+          <view class="model-name">{{item.name}}</view>
+          <view class="model-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
+          <view class="plan-tiers">
+            <view class="plan-tier {{tier.f ? 'featured' : ''}}" wx:for="{{item.planTiers}}" wx:key="n" wx:for-item="tier">
+              <view class="plan-tier-name">{{tier.n}}</view>
+              <view class="plan-tier-price">¥{{tier.pr}}<text class="plan-tier-period">/{{tier.pe}}</text></view>
+              <view class="plan-tier-desc" wx:if="{{tier.d}}">{{tier.d}}</view>
+            </view>
           </view>
         </view>
-        <view class="model-name">{{item.name}}<text class="stale-icon" wx:if="{{item.stale}}"> ⚠️</text></view>
-        <view class="model-tag-row" wx:if="{{item.tag}}"><text class="model-tag">{{item.tag}}</text></view>
-        <view class="model-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
-        <view class="price-row">
-          <view class="price-item">
-            <text class="price-label">输入</text>
-            <text class="price-value">{{item.currency || "¥"}}{{item.inputPrice}}</text>
-            <text class="price-note" wx:if="{{item.inputNote}}">{{item.inputNote}}</text>
+        <!-- 订阅套餐卡片（单档位） -->
+        <view class="plan-single" wx:elif="{{item.planType}}" bindtap="onTapModel" data-id="{{item.id}}">
+          <view class="card-header">
+            <view class="provider-tag" style="background:{{item.providerColor}}">{{item.provider}}</view>
+            <view class="plan-badge">📦 订阅</view>
           </view>
-          <view class="price-divider"></view>
-          <view class="price-item">
-            <text class="price-label">输出</text>
-            <text class="price-value">{{item.currency || "¥"}}{{item.outputPrice}}</text>
-            <text class="price-note" wx:if="{{item.outputNote}}">{{item.outputNote}}</text>
+          <view class="model-name">{{item.name}}</view>
+          <view class="model-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
+          <view class="plan-single-price" wx:if="{{item.planPrice > 0}}">¥{{item.planPrice}}<text class="plan-price-period">/{{item.planPeriod}}</text></view>
+          <view class="plan-single-meta" wx:if="{{item.planTags && item.planTags.length > 0}}">
+            <text class="plan-single-tag" wx:for="{{item.planTags}}" wx:key="*this" wx:for-item="tg">{{tg}}</text>
           </view>
         </view>
-        <view class="cache-row" wx:if="{{item.cachePrice}}">
-          <text class="cache-label">缓存命中:</text><text class="cache-value">{{item.currency || "¥"}}{{item.cachePrice}}</text>
-        </view>
-        <view class="context-info" wx:if="{{item.contextWindow}}">上下文: {{item.contextWindow}}</view>
-      </view>
+      </block>
     </view>
 
     <!-- 算力列表 -->

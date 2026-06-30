@@ -240,14 +240,22 @@ Page({
     var ap = this.data.activeProvider
     if (ap) list = list.filter(function(m) { return m.provider === ap })
     var sb = this.data.sortBy, sa = this.data.sortAsc
-    list.sort(function(a, b) {
+    // 分离按量模型和订阅套餐
+    var tokenList = list.filter(function(m) { return !m.planType })
+    var planList = list.filter(function(m) { return m.planType })
+    tokenList.sort(function(a, b) {
       var va, vb
       if (sb === 'input') { va = a.inputPrice||0; vb = b.inputPrice||0 }
       else if (sb === 'output') { va = a.outputPrice||0; vb = b.outputPrice||0 }
       else { va = a.name; vb = b.name; return sa ? va.localeCompare(vb) : vb.localeCompare(va) }
       return sa ? va - vb : vb - va
     })
-    this.setData({ filteredList: list })
+    // 订阅套餐始终排在按量模型后面，按 planPrice 排序
+    planList.sort(function(a, b) {
+      var pa = a.planPrice || 0, pb = b.planPrice || 0
+      return sa ? pa - pb : pb - pa
+    })
+    this.setData({ filteredList: tokenList.concat(planList) })
   },
 
   // ============================================================

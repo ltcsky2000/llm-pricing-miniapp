@@ -8,7 +8,8 @@
         <text class="model-tag-detail">{{model.tag}}</text>
       </view>
     </view>
-    <view class="section">
+    <!-- 按量计费价格 -->
+    <view class="section" wx:if="{{!model.planType}}">
       <text class="section-title">💰 价格详情 (元/百万tokens)</text>
       <view class="price-table">
         <view class="price-row-detail"><text class="price-type">输入价格</text><text class="price-num">{{model.currency || "¥"}}{{model.inputPrice}}</text></view>
@@ -16,6 +17,28 @@
         <view class="price-row-detail"><text class="price-type">输出价格</text><text class="price-num">{{model.currency || "¥"}}{{model.outputPrice}}</text></view>
         <view class="price-row-detail" wx:if="{{model.outputNote}}"><text class="price-type">输出说明</text><text class="price-num small">{{model.outputNote}}</text></view>
         <view class="price-row-detail" wx:if="{{model.cachePrice}}"><text class="price-type">缓存命中</text><text class="price-num">{{model.currency || "¥"}}{{model.cachePrice}}</text></view>
+      </view>
+    </view>
+    <!-- 订阅套餐详情 -->
+    <view class="section" wx:if="{{model.planType}}">
+      <text class="section-title">📦 订阅套餐</text>
+      <!-- 多档位 -->
+      <view class="detail-tiers" wx:if="{{model.planTiers && model.planTiers.length > 0}}">
+        <view class="detail-tier {{tier.f ? 'featured' : ''}}" wx:for="{{model.planTiers}}" wx:key="n" wx:for-item="tier">
+          <view class="detail-tier-header">
+            <text class="detail-tier-name">{{tier.n}}</text>
+            <text class="detail-tier-badge" wx:if="{{tier.f}}">推荐</text>
+          </view>
+          <text class="detail-tier-price">¥{{tier.pr}}<text class="detail-tier-period">/{{tier.pe}}</text></text>
+          <text class="detail-tier-desc" wx:if="{{tier.d}}">{{tier.d}}</text>
+        </view>
+      </view>
+      <!-- 单档位 -->
+      <view class="detail-single" wx:else>
+        <view class="price-row-detail"><text class="price-type">订阅价格</text><text class="price-num">¥{{model.planPrice}}/{{model.planPeriod}}</text></view>
+        <view class="detail-tags" wx:if="{{model.planTags && model.planTags.length > 0}}">
+          <text class="detail-tag" wx:for="{{model.planTags}}" wx:key="*this" wx:for-item="tg">{{tg}}</text>
+        </view>
       </view>
     </view>
     <view class="section">

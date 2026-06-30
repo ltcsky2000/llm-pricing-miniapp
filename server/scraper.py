@@ -95,6 +95,10 @@ SEED_DATA = [
   {"n":"bge-base-en-v1.5","p":"中国联通","pc":"#E60012","i":0.5,"o":0,"in_":"Embedding","cw":"512","t":"Embedding","d":"联通AI-BGE嵌入","id":111,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"📊 嵌入"},
   {"n":"bge-reranker-v2-m3","p":"中国联通","pc":"#E60012","i":0.7,"o":0,"in_":"Reranker","cw":"512","t":"Reranker","d":"联通AI-BGE重排序","id":112,"s":["https://support.cucloud.cn/document/127/591/2357.html"],"tg":"📊 嵌入"},
 
+
+  {"n":"Token Plan","p":"MiniMax","pc":"#FF4500","tp":"subscription","pts":"[{\"n\":\"Plus\",\"pr\":49,\"pe\":\"月\",\"d\":\"轻量个人开发\"},{\"n\":\"Max\",\"pr\":119,\"pe\":\"月\",\"d\":\"高频编程Agent\",\"f\":true},{\"n\":\"Ultra\",\"pr\":469,\"pe\":\"月\",\"d\":\"重度工作流\"}]","d":"文本/图像/语音/音乐共享额度，超出自补","id":200,"s":["https://platform.minimaxi.com/docs/guides/pricing-token-plan"]},
+  {"n":"编程Token Plan","p":"天翼云","pc":"#0078D4","tp":"subscription","pp":9.9,"pd":"月起","ptg":"[\"编程专用\",\"包周期\",\"专属Key\",\"接入AI工具\"]","d":"天翼云编程订阅套餐，包周期计费","id":201,"s":["https://www.ctyun.cn/document/11061839/11062267"]},
+  {"n":"Coding Plan","p":"中国联通","pc":"#E60012","tp":"subscription","pp":0,"pd":"月起","ptg":"[\"Lite版\",\"Pro专业进阶\",\"5倍额度\",\"高并发\"]","d":"联通AI编程订阅，月请求次数配额","id":202,"s":["https://support.cucloud.cn/document/127/591/2357.html"]},
 ]
 
 # ============================================================
