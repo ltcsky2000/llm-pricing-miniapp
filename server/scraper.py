@@ -101,6 +101,21 @@ SEED_DATA = [
   {"n":"Go 订阅","p":"OpenCode","pc":"#6366F1","planType":"subscription","tiers":[{"name":"首月","price":5,"period":"月","desc":"$5首月","quota":"13个编程模型"},{"name":"标准","price":10,"period":"月","desc":"全球多区域","quota":"$12/5h $60/月"}],"d":"开源编程模型订阅","t":"订阅套餐","id":203,"cu":"$","s":["https://opencode.ai/docs/zh-cn/go/"]},
   {"n":"Token Plan","p":"中国联通","pc":"#E60012","planType":"subscription","tiers":[{"name":"Lite","price":15,"period":"月","desc":"尝鲜用户","quota":"600万tokens"},{"name":"Pro","price":30,"period":"月","desc":"效率达人","quota":"1200万tokens"},{"name":"Max","price":45,"period":"月","desc":"核心开发者","quota":"1800万tokens"}],"d":"个人版大模型订阅套餐，按tokens额度计费","t":"订阅套餐","id":204,"s":["https://support.cucloud.cn/document/127/591/2357.html?folderid=3236"]},
 
+  {"n":"GPT-5.5-Pro","p":"OpenAI","pc":"#10A37F","i":30.0,"o":180.0,"cw":"272K","t":"旗舰模型","cap":"深度推理/专业工作","d":"GPT-5.5专业推理版","isHot":True,"id":205,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-5.4-Nano","p":"OpenAI","pc":"#10A37F","i":0.2,"o":1.25,"cp":0.02,"cw":"272K","t":"轻量模型","d":"极致低价nano","id":206,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-5.2","p":"OpenAI","pc":"#10A37F","i":1.75,"o":14.0,"cp":0.175,"cw":"272K","t":"高性能","d":"GPT-5.2代","id":207,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-5.1","p":"OpenAI","pc":"#10A37F","i":1.25,"o":10.0,"cp":0.125,"cw":"272K","t":"高性能","d":"GPT-5.1代","id":208,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-5","p":"OpenAI","pc":"#10A37F","i":1.25,"o":10.0,"cp":0.125,"cw":"272K","t":"高性能","d":"GPT-5代","id":209,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-5-Mini","p":"OpenAI","pc":"#10A37F","i":0.25,"o":2.0,"cp":0.025,"cw":"272K","t":"轻量模型","d":"轻量高性价比","id":210,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-5-Nano","p":"OpenAI","pc":"#10A37F","i":0.05,"o":0.4,"cp":0.005,"cw":"272K","t":"轻量模型","d":"极致低价nano","id":211,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-4.1","p":"OpenAI","pc":"#10A37F","i":2.0,"o":8.0,"cp":0.5,"cw":"1M","t":"高性能","d":"GPT-4.1代","id":212,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-4.1-Mini","p":"OpenAI","pc":"#10A37F","i":0.4,"o":1.6,"cp":0.1,"cw":"1M","t":"轻量模型","d":"GPT-4.1轻量版","id":213,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"GPT-4.1-Nano","p":"OpenAI","pc":"#10A37F","i":0.1,"o":0.4,"cp":0.025,"cw":"1M","t":"轻量模型","d":"GPT-4.1 nano","id":214,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"]},
+  {"n":"o3","p":"OpenAI","pc":"#10A37F","i":2.0,"o":8.0,"cp":0.5,"cw":"200K","t":"推理模型","cap":"思考/推理","d":"推理模型o3","id":215,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"],"tg":"🧠 推理"},
+  {"n":"o4-mini","p":"OpenAI","pc":"#10A37F","i":1.1,"o":4.4,"cp":0.275,"cw":"200K","t":"推理模型","cap":"思考/推理","d":"轻量推理o4-mini","id":216,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"],"tg":"🧠 推理"},
+  {"n":"o3-mini","p":"OpenAI","pc":"#10A37F","i":1.1,"o":4.4,"cp":0.55,"cw":"200K","t":"推理模型","cap":"思考/推理","d":"轻量推理o3-mini","id":217,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"],"tg":"🧠 推理"},
+  {"n":"o3-Pro","p":"OpenAI","pc":"#10A37F","i":20.0,"o":80.0,"cw":"200K","t":"推理模型","cap":"深度推理","d":"专业推理o3-pro","isHot":True,"id":218,"cu":"$","s":["https://openai.com/zh-Hans-CN/api/pricing/"],"tg":"🧠 推理"},
+
 ]
 
 # ============================================================
