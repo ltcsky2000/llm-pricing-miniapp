@@ -23,23 +23,22 @@
     <view class="section" wx:if="{{model.planType}}">
       <text class="section-title">📦 订阅套餐</text>
       <!-- 多档位 -->
-      <view class="detail-tiers" wx:if="{{model.planTiers && model.planTiers.length > 0}}">
-        <view class="detail-tier {{tier.f ? 'featured' : ''}}" wx:for="{{model.planTiers}}" wx:key="n" wx:for-item="tier">
+      <view class="detail-tiers" wx:if="{{model.tiers && model.tiers.length > 0}}">
+        <view class="detail-tier {{tier.featured ? 'featured' : ''}}" wx:for="{{model.tiers}}" wx:key="n" wx:for-item="tier">
           <view class="detail-tier-header">
-            <text class="detail-tier-name">{{tier.n}}</text>
-            <text class="detail-tier-badge" wx:if="{{tier.f}}">推荐</text>
+            <text class="detail-tier-name">{{tier.name}}</text>
+            <text class="detail-tier-badge" wx:if="{{tier.featured}}">推荐</text>
           </view>
-          <text class="detail-tier-price">¥{{tier.pr}}<text class="detail-tier-period">/{{tier.pe}}</text></text>
-          <text class="detail-tier-desc" wx:if="{{tier.d}}">{{tier.d}}</text>
+          <text class="detail-tier-price">{{model.currency || "¥"}}{{tier.price}}<text class="detail-tier-period">/{{tier.period}}</text></text>
+          <text class="detail-tier-desc" wx:if="{{tier.desc}}">{{tier.desc}}</text>
         </view>
       </view>
-      <!-- 单档位 -->
-      <view class="detail-single" wx:else>
-        <view class="price-row-detail"><text class="price-type">订阅价格</text><text class="price-num">¥{{model.planPrice}}/{{model.planPeriod}}</text></view>
-        <view class="detail-tags" wx:if="{{model.planTags && model.planTags.length > 0}}">
-          <text class="detail-tag" wx:for="{{model.planTags}}" wx:key="*this" wx:for-item="tg">{{tg}}</text>
-        </view>
-      </view>
+
+    </view>
+        <!-- 套餐限制说明 -->
+    <view class="section" wx:if="{{model.planType && model.desc}}">
+      <text class="section-title">📋 套餐说明</text>
+      <text class="section-text">{{model.desc}}</text>
     </view>
     <view class="section">
       <text class="section-title">📊 技术参数</text>

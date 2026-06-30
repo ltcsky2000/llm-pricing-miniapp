@@ -22,3 +22,4 @@
 .detail-tier-desc{font-size:24rpx;color:#888}
 .detail-tags{display:flex;gap:10rpx;flex-wrap:wrap;margin-top:16rpx}
 .detail-tag{font-size:22rpx;color:#7eb8ff;background:rgba(100,149,237,.12);padding:4rpx 14rpx;border-radius:12rpx}
+.section-text{font-size:26rpx;color:#aaa;line-height:1.6;padding:0 4rpx}
